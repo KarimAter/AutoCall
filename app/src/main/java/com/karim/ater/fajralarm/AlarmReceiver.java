@@ -39,8 +39,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         int x = tm.getCallState();
         if (x == TelephonyManager.CALL_STATE_OFFHOOK)
             endExistingCall(context);
-//        else if (x == TelephonyManager.CALL_STATE_IDLE)
-//            callingStuff(context);
     }
 
     // ending the phoneListener
