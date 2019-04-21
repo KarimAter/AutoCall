@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">FajrCaller</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="setAlarmButtonText">Set Alarm</string>
+    <string name="stopAlarmButtonText">Stop Alarms</string>
+    <string name="Settings">Settings</string>
+    <string name="Language">Language</string>
+    <string name="CallCount">Number of calls</string>
+    <string name="FajrMethod">Fajr prayer calculation method</string>
+    <string name="LanguageSummary">Change language settings</string>
+    <string name="CallCountSummary">Select the number of waking calls</string>
+    <string name="FajrMethodSummary">Select fajr prayer time calculation method</string>
+    <string name="HomeButton">Home</string>
+    <string name="ContactsButton">Contacts</string>
+    <string name="DeleteContactAction"> has been removed from contacts</string>
+    <string name="SetAlarmAction"> Fajr waking calls will start at </string>
+    <string name="MaxContactsMessage"> You cannot add more than 10 contacts </string>
+    <string name="ExistingNumberMessage"> Number already exists </string>
+    <string name="LogsButton">Logs</string>
+
+</resources>

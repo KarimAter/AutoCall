@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">متصل الفجر</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="setAlarmButtonText">تشغيل</string>
+    <string name="stopAlarmButtonText">إلغاء</string>
+    <string name="Settings">الاعدادات</string>
+    <string name="Language">اللغة</string>
+    <string name="CallCount">عدد المكالمات</string>
+    <string name="FajrMethod">طريقة حساب توقيت الفجر</string>
+    <string name="LanguageSummary">اختر اللغة </string>
+    <string name="CallCountSummary">اختر عدد مكالمات الإيقاظ</string>
+    <string name="FajrMethodSummary">اختر طريقة حساب توقيت الفجر</string>
+    <string name="HomeButton">الرئيسية</string>
+    <string name="ContactsButton">قائمة المكالمات</string>
+    <string name="DeleteContactAction"> تم إزالته من القائمة</string>
+    <string name="MaxContactsMessage"> لا تستطيع زيادة اكثر من 10 أشخاص </string>
+    <string name="ExistingNumberMessage"> هذا الرقم موجود بالفعل </string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/LanguageArray"
+        android:entryValues="@array/LanguageArrayValues"
+        android:key="list_preference_1"
+        android:summary="@string/LanguageSummary"
+        android:title="@string/Language" />
+    <ListPreference
+        android:defaultValue="4"
+        android:entries="@array/NumberOfCallsArray"
+        android:entryValues="@array/NumberOfCallsArrayValues"
+        android:key="list_preference_2"
+        android:summary="@string/CallCountSummary"
+        android:title="@string/CallCount" />
+    <ListPreference
+        android:defaultValue="5"
+        android:entries="@array/FajrMethodsArray"
+        android:entryValues="@array/FajrMethodsArrayValues"
+        android:key="list_preference_3"
+        android:summary="@string/FajrMethodSummary"
+        android:title="@string/FajrMethod" />
+    <Preference
+        android:key="stopBatteryOptimization"
+        android:title="Stop Battery Optimization"
+        android:summary="Allow Fajr alarm to work in background to function properly"></Preference>
+
+</PreferenceScreen>

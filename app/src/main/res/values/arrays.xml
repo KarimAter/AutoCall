@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="LanguageArray">
+        <item>English</item>
+        <item>Arabic</item>
+    </string-array>
+    <string-array name="LanguageArrayValues">
+        <item>en</item>
+        <item>ar</item>
+    </string-array>
+
+    <string-array name="NumberOfCallsArray">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+    </string-array>
+    <string-array name="NumberOfCallsArrayValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="FajrMethodsArray">
+        <item>Shia Ithna-Ansar</item>
+        <item>University of Islamic Sciences, Karachi</item>
+        <item>Islamic Society of North America</item>
+        <item>Muslim World League</item>
+        <item>Umm Al-Qura University, Makkah</item>
+        <item>Egyptian General Authority of Survey</item>
+        <item>Institute of Geophysics, University of Tehran</item>
+        <item>Gulf Region</item>
+        <item>Kuwait</item>
+        <item>Qatar</item>
+        <item>Majlis Ugama Islam Singapura, Singapore</item>
+        <item>Union Organization islamic de France</item>
+        <item>Diyanet İşleri Başkanlığı, Turkey</item>
+        <item>Spiritual Administration of Muslims of Russia</item>
+    </string-array>
+    <string-array name="FajrMethodsArrayValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+    </string-array>
+
+</resources>
