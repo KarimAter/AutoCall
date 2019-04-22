@@ -29,9 +29,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACT_TABLE = "CREATE Table " + CONTACTS_TABLE + "(" + ID + " INTEGER, " + CONTACT_NAME +
-                " TEXT," + CONTACT_NUMBER + " TEXT," + CONTACT_CALL_TIME + " TEXT," + CONTACT_CALL_COUNT + " INTEGER," +
-                CONTACT_LOG + " TEXT)";
+        String CREATE_CONTACT_TABLE = "CREATE Table " + CONTACTS_TABLE + "(" + ID + " INTEGER primary key AUTOINCREMENT UNIQUE, "
+                + CONTACT_NAME + " TEXT," + CONTACT_NUMBER + " TEXT," + CONTACT_CALL_TIME + " TEXT," + CONTACT_CALL_COUNT
+                + " INTEGER," + CONTACT_LOG + " TEXT)";
         db.execSQL(CREATE_CONTACT_TABLE);
     }
 

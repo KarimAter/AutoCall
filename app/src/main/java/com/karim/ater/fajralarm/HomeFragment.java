@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,44 +34,28 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static com.karim.ater.fajralarm.Constants.dateFormat;
+
 public class HomeFragment extends Fragment {
     private String TAG = Fagr.class.getSimpleName();
-    View view = null;
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final int PICK_CONTACT = 44;
-    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 7;
-    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 4;
-    public static final int REQUEST_CODE_MULTIPLE_PERMISSIONS = 1;
-    private static final String[] MY_PERMISSIONS = {Manifest.permission.CALL_PHONE, Manifest.permission.READ_CONTACTS};
-    Button setAlarmBu, cancelAlarmBu;
-    TimePicker timePicker;
-    Calendar calendar, callCalendar;
-    TextView fajrTimeTv;
-    ArrayList<Contact> selectedContacts = new ArrayList<>();
+    private View view = null;
+    private Button setAlarmBu, cancelAlarmBu;
+    private TimePicker timePicker;
+    private Calendar calendar, callCalendar;
+    private TextView fajrTimeTv;
+    private ArrayList<Contact> selectedContacts = new ArrayList<>();
     private AdView mAdView;
-    private static final String ADMOB_APP_ID = "ca-app-pub-6836093923955433~8387322372";
-    int fajrMethod;
-    double longitude, latitude;
-    Location location;
-    //    public static final String FAJR_WEBSERVICE_LINK=
-//            "http://api.aladhan.com/v1/calendarByCity?city=Cairo&country=Egypt&method=5&month=01&year=2019";
-    public String FAJR_WEBSERVICE_LINK =
-            "http://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=";
-    public String FAJR_WEBSERVICE_LINKK =
-            "http://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5";
-
-    private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
-    private FusedLocationProviderClient mFusedLocationClient;
-    Context context;
-
+    private Context context;
+    private boolean timeDifference;
+    private Location lastLocation;
 
     @Override
     public void onPause() {
         super.onPause();
+        // Saving the selected time
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Utils.setTimePickerHour(getContext(), timePicker.getHour());
             Utils.setTimePickerMinute(getContext(), timePicker.getMinute());
@@ -78,47 +63,50 @@ public class HomeFragment extends Fragment {
             Utils.setTimePickerHour(getContext(), timePicker.getCurrentHour());
             Utils.setTimePickerMinute(getContext(), timePicker.getCurrentMinute());
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Permissions.getPermissionsResult(context, 2)) {
+            gettingLocation();
+            makeJsonObjReq();
+            setFajrTimeTv();
+        }
 
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getContext();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         if (view == null) {
-            context = getContext();
-            initializeViews(inflater);
+            view = inflater.inflate(R.layout.fragment_home, container, false);
+            initializeViews(view);
             loadAd();
-            String fajrPrayerTime = Utils.getFajrPrayerTime(context);
-            if (!fajrPrayerTime.equals(""))
-                fajrTimeTv.setText(fajrPrayerTime);
-            else fajrTimeTv.setVisibility(View.INVISIBLE);
-
-
-            location = getDeviceLastLocation();
-
-            if (location == null) {
-                GPSTracker gpsTracker = new GPSTracker(context);
-                location = gpsTracker.getLocation(context);
-            }
-            if (location != null) {
-                Utils.setLatitude(context, location.getLatitude());
-                Utils.setLongitude(context, location.getLongitude());
-            }
-            makeJsonObjReq();
-
-
             setAlarmBu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // check the calling permission
                     boolean permissionsResult = Permissions.getPermissionsResult(context, 0);
                     if (permissionsResult) {
+//                        if (timeDifference) {
                         getTime();
                         callCalendar = calendar;
+                        // resetting call counts to default value and clearing old logs
                         DatabaseHelper databaseHelper = new DatabaseHelper(context);
                         databaseHelper.resetCallCount(Utils.getCallsCount(context) - 1);
                         databaseHelper.clearLog();
+
+                        // adjusting contact calling times in database
                         selectedContacts = databaseHelper.loadContacts();
                         databaseHelper.setCallsTime(selectedContacts, calendar);
+
+                        // Creating call alarms
                         for (int i = 0; i < selectedContacts.size(); i++) {
                             Utils.setRecurringAlarm(context, selectedContacts.get(i).getContactNumber(),
                                     selectedContacts.get(i).getContactId(), callCalendar);
@@ -127,9 +115,12 @@ public class HomeFragment extends Fragment {
                         }
                         Utils.setLastCallTime(context, dateFormat.format(callCalendar.getTime()));
                         Toast.makeText(context, context.getResources().getString(R.string.SetAlarmAction)
-                                + dateFormat.format(callCalendar.getTime()), Toast.LENGTH_LONG).show();
-
+                                + dateFormat.format(calendar.getTime()), Toast.LENGTH_LONG).show();
+//                        }
+//                        else Toast.makeText(context, "Alarms should be before or after Fajr time by 30 minutes",
+//                                Toast.LENGTH_LONG).show();
                     } else {
+                        // Request permissions
                         Permissions.checkPermissions(getActivity(), Constants.MAIN_PERMISSIONS);
                     }
                 }
@@ -139,18 +130,11 @@ public class HomeFragment extends Fragment {
             cancelAlarmBu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Stopping the alarms
                     DatabaseHelper databaseHelper = new DatabaseHelper(context);
                     ArrayList<Contact> currentContacts = databaseHelper.loadContacts();
-
                     for (int i = 0; i < currentContacts.size(); i++) {
-
-                        String callTime = currentContacts.get(i).getContactCallTime();
-                        Calendar nextCallCalendar = Utils.convertStringToCalendar(callTime, dateFormat);
-                        Calendar currentCalendar = Calendar.getInstance();
-
-//                        if (nextCallCalendar.getTimeInMillis() > currentCalendar.getTimeInMillis()) {
                         Utils.stopAlarms(context, currentContacts.get(i).getContactNumber(), currentContacts.get(i).getContactId());
-//                        }
                     }
                     databaseHelper.resetCallsTime();
                 }
@@ -160,8 +144,83 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void initializeViews(LayoutInflater inflater) {
-        view = inflater.inflate(R.layout.fragment_home, null);
+    private void gettingLocation() {
+        // get location by last saved location method
+//        Location location = getDeviceLastLocation();
+        // get location by gps location
+//        if (location == null) {
+        GPSTracker gpsTracker = new GPSTracker(getActivity());
+        Location location = gpsTracker.getLocation(getActivity());
+//        }
+        // Saving location
+        if (location != null) {
+            Utils.setLatitude(context, location.getLatitude());
+            Utils.setLongitude(context, location.getLongitude());
+        }
+    }
+
+    // Request fajr time from API
+    private void makeJsonObjReq() {
+        String fajrWebServiceLink = generateWebServiceLink();
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                fajrWebServiceLink, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Gson gson = new Gson();
+                        ResponseClass currentResponse = gson.fromJson(response.toString(), ResponseClass.class);
+                        String fajrPrayerTime = currentResponse.getData().getTimings().getFajr();
+                        Toast.makeText(context, fajrPrayerTime, Toast.LENGTH_LONG).show();
+                        Utils.setFajrPrayerTime(context, fajrPrayerTime);
+                        fajrTimeTv.setText(fajrPrayerTime);
+                        fajrTimeTv.setVisibility(View.VISIBLE);
+                        Log.d("TimingCalibration", "onResponse: " + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        });
+        // Adding request to request queue
+        String tag_json_obj = "jobj_req";
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+
+    // Generating the link based on location
+    private String generateWebServiceLink() {
+        StringBuilder builder = new StringBuilder();
+        Float latitude = Utils.getLatitude(context);
+        Float longitude = Utils.getLongitude(context);
+        int fajrMethod = Utils.getFajrMethod(context);
+
+        // if location not null
+        if (longitude != 1000 & latitude != 1000) {
+
+            builder.append(" http://api.aladhan.com/v1/timings/");
+            long tsLong = System.currentTimeMillis() / 1000;
+            String ts = Long.toString(tsLong);
+            builder.append(ts);
+            builder.append("?latitude=");
+            builder.append(latitude);
+            builder.append("&longitude=");
+            builder.append(longitude);
+            builder.append("&method=");
+            builder.append(fajrMethod);
+            Log.d("TimingCalibration", "generateWebServiceLink: Lat:" + latitude + " Long:" + longitude + " method:" + fajrMethod + " Stamp:" + tsLong);
+            return builder.toString();
+        } else return null;
+    }
+
+    // Setting the Fajr time in the textView
+    private void setFajrTimeTv() {
+        String fajrPrayerTime = Utils.getFajrPrayerTime(context);
+        if (!fajrPrayerTime.isEmpty())
+            fajrTimeTv.setText(fajrPrayerTime);
+    }
+
+    private void initializeViews(View view) {
         mAdView = view.findViewById(R.id.adView);
         timePicker = view.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
@@ -183,7 +242,7 @@ public class HomeFragment extends Fragment {
 
     // Todo: Change add Id
     private void loadAd() {
-        MobileAds.initialize(context, ADMOB_APP_ID);
+        MobileAds.initialize(context, Constants.ADMOB_APP_ID);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
     }
@@ -197,8 +256,8 @@ public class HomeFragment extends Fragment {
             hour = timePicker.getCurrentHour();
             minute = timePicker.getCurrentMinute();
         }
-        boolean timeDiff = compareTimeToFajr(hour, minute);
-        Toast.makeText(context, String.valueOf(timeDiff), Toast.LENGTH_LONG).show();
+        timeDifference = compareTimeToFajr(hour, minute);
+        Toast.makeText(context, String.valueOf(timeDifference), Toast.LENGTH_LONG).show();
 
         calendar = Calendar.getInstance();
         Calendar currentCalendar = Calendar.getInstance();
@@ -219,7 +278,10 @@ public class HomeFragment extends Fragment {
         calendar111.set(Calendar.HOUR_OF_DAY, hour);
         calendar111.set(Calendar.MINUTE, minute);
         Calendar calendar112 = Calendar.getInstance();
-        String[] parts = Utils.getFajrPrayerTime(context).split(":");
+        String fajrPrayerTime = Utils.getFajrPrayerTime(context);
+        if (fajrPrayerTime.isEmpty())
+            return true;
+        String[] parts = fajrPrayerTime.split(":");
         calendar112.set(Calendar.HOUR_OF_DAY, Integer.valueOf(parts[0]));
         calendar112.set(Calendar.MINUTE, Integer.valueOf(parts[1]));
         long diff = Math.abs(calendar112.getTime().getTime() - calendar111.getTime().getTime());
@@ -227,71 +289,9 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void makeJsonObjReq() {
-        /**
-         * Making json object request
-         */
-        String fajrWebServiceLink = generateWebServiceLink();
-//        String fajrWebServiceLink = " http://api.aladhan.com/v1/timings/1398332113?latitude=30.07207207207207&longitude=31.02262310111727&method=5";
-//        showProgressDialog();
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                fajrWebServiceLink, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        Gson gson = new Gson();
-                        ResponseClass currentResponse = gson.fromJson(response.toString(), ResponseClass.class);
-                        String fajrPrayerTime = currentResponse.getData().getTimings().getFajr();
-                        Toast.makeText(context, fajrPrayerTime, Toast.LENGTH_LONG).show();
-                        Utils.setFajrPrayerTime(context, fajrPrayerTime);
-                        fajrTimeTv.setText(fajrPrayerTime);
-                        Log.d("TimingCalibration", "onResponse: " + response.toString());
-
-//                        hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-//                hideProgressDialog();
-            }
-        });
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
-
-        // Cancelling request
-        // ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_obj);
-    }
-
-    private String generateWebServiceLink() {
-        StringBuilder builder = new StringBuilder();
-        Float latitude = Utils.getLatitude(context);
-        Float longitude = Utils.getLongitude(context);
-        fajrMethod = Utils.getFajrMethod(context);
-
-        if (longitude != 1000 & latitude != 1000) {
-
-            builder.append(" http://api.aladhan.com/v1/timings/");
-            Long tsLong = System.currentTimeMillis() / 1000;
-            String ts = tsLong.toString();
-            builder.append(ts);
-            builder.append("?latitude=");
-            builder.append(latitude);
-            builder.append("&longitude=");
-            builder.append(longitude);
-            builder.append("&method=");
-            builder.append(fajrMethod);
-            Log.d("TimingCalibration", "generateWebServiceLink: Lat:" + latitude + " Long:" + longitude + " method:" + fajrMethod + " Stamp:" + tsLong);
-            return builder.toString();
-        } else return null;
-    }
-
+    // Getting last known location
     private Location getDeviceLastLocation() {
-        final Location[] location = {null};
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -304,11 +304,10 @@ public class HomeFragment extends Fragment {
                 // Got last known location. In some rare situations this can be null.
                 if (loc != null) {
                     // Logic to handle location object
-                    location[0] = loc;
-
+                    lastLocation = loc;
                 }
             }
         });
-        return location[0];
+        return lastLocation;
     }
 }

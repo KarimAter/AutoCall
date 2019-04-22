@@ -29,17 +29,18 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Fagr extends AppCompatActivity {
-    Fragment fragment = null;
-    BottomNavigationView bottomNavigationView;
-    FloatingActionButton fab;
-    int contactsCount;
+    private Fragment fragment = null;
+    private BottomNavigationView bottomNavigationView;
+    private FloatingActionButton addContactFab;
+    private int contactsCount;
     private static final int PICK_CONTACT = 44;
 
     @Override
     public void onResume() {
         super.onResume();
+        // Change Language if it has been changed
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String value = prefs.getString("list_preference_1", "en");
+        String value = prefs.getString("language_preference", "en");
         Locale myLocale = new Locale(value);
         Locale.setDefault(myLocale);
         android.content.res.Configuration config = new android.content.res.Configuration();
@@ -52,39 +53,36 @@ public class Fagr extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (!Utils.ignoringBatteryOptimization(this))
-//            Utils.startPowerSaverIntent(this);
         setContentView(R.layout.activity_fagr);
-//        mCoordinatorLo = findViewById(R.id.mCoordinatorLo);
         bottomNavigationView = findViewById(R.id.bottomNav);
-        fab = findViewById(R.id.fab);
+        addContactFab = findViewById(R.id.fab);
         fragment = new HomeFragment();
-        loadFragment(fragment);
-
 
         String lastCallingTime = Utils.getLastCallTime(this);
-//        int callCount = Utils.getCallsCount(this);
-
         resettingCallsDate(lastCallingTime);
 
+        // Permissions work
         Permissions.checkPermissions(Fagr.this, Constants.ALL_PERMISSIONS);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        loadFragment(fragment);
+
+        addContactFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 boolean permissionResults = Permissions.getPermissionsResult(Fagr.this, 1);
                 if (permissionResults) {
-                    final DatabaseHelper databaseHelper = new DatabaseHelper(getBaseContext());
+                    final DatabaseHelper databaseHelper = new DatabaseHelper(Fagr.this);
                     contactsCount = databaseHelper.getNumberOfContacts();
+                    // checks that contacts are less than 10
                     if (contactsCount < 10) {
                         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                         startActivityForResult(intent, PICK_CONTACT);
                     } else
                         Toast.makeText(Fagr.this, getResources().getString(R.string.MaxContactsMessage),
                                 Toast.LENGTH_SHORT).show();
-
                 } else {
+                    // if contacts & calling permissions are denied
                     Permissions.checkPermissions(Fagr.this, Constants.MAIN_PERMISSIONS);
                 }
             }
@@ -116,6 +114,7 @@ public class Fagr extends AppCompatActivity {
         });
     }
 
+    // Resetting calling times if app is launched after performing all calls
     private void resettingCallsDate(String lastCallingTime) {
         try {
             Date lastDate = Constants.dateFormat.parse(lastCallingTime);
@@ -132,9 +131,9 @@ public class Fagr extends AppCompatActivity {
     private void loadFragment(Fragment fragment) {
         if (fragment != null) {
             if (fragment instanceof ContactsFragment)
-                fab.show();
+                addContactFab.show();
             else
-                fab.hide();
+                addContactFab.hide();
             getSupportFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
         }
     }
@@ -159,13 +158,17 @@ public class Fagr extends AppCompatActivity {
                         contactNumbers.add(numberCursor.getString(0));
                         numberCursor.moveToNext();
                     }
+                    // If contact has one number only
                     if (contactNumbers.size() == 1) {
                         DatabaseHelper databaseHelper = new DatabaseHelper(Fagr.this);
                         boolean check = databaseHelper.addContact(name, contactNumbers.get(0));
                         if (!check)
                             Toast.makeText(getBaseContext(), "Number already exists", Toast.LENGTH_LONG).show();
-                    } else {
-                        AlertDialog.Builder dialog = Utils.showDialog(this);
+                    } else
+                    // If contact has more than one number
+                    {
+                        // Show number selector dialog
+                        AlertDialog.Builder dialog = Utils.showDialog(this, "Select number");
                         dialog.setSingleChoiceItems(contactNumbers.toArray(new CharSequence[contactNumbers.size()]),
                                 0, new DialogInterface.OnClickListener() {
                                     @Override
@@ -186,6 +189,7 @@ public class Fagr extends AppCompatActivity {
                         dialog.show();
 
                     }
+                    // Returning to contact fragment
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.frame, new ContactsFragment());
                     ft.commit();
@@ -205,12 +209,13 @@ public class Fagr extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
 
         if (permissions.length == 0) {
             return;
         }
         boolean allPermissionsGranted = true;
+        // Checks whether all permissions are granted or not
         if (grantResults.length > 0) {
             for (int grantResult : grantResults) {
                 if (grantResult != PackageManager.PERMISSION_GRANTED) {
@@ -240,6 +245,7 @@ public class Fagr extends AppCompatActivity {
                     }
                 }
             }
+            // Dialog to apps permissions setting if permissions are denied forever
             if (somePermissionsForeverDenied) {
                 final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("Permissions Required")
@@ -267,6 +273,7 @@ public class Fagr extends AppCompatActivity {
                         .show();
             }
         } else {
+            // Saving permissions results
             for (int i = 0, len = permissions.length; i < len; i++) {
                 if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
 
@@ -275,10 +282,9 @@ public class Fagr extends AppCompatActivity {
                     Permissions.setPermissionsResult(Fagr.this, i, true);
 
             }
-
+            // To start power saver intent
             if (Permissions.getPermissionsResult(this, 0) &&
-                    Permissions.getPermissionsResult(this, 1) &&
-                    !Utils.ignoringBatteryOptimization(this)) {
+                    Permissions.getPermissionsResult(this, 1)) {
                 Utils.startPowerSaverIntent(this);
             }
         }

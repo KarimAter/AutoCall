@@ -81,6 +81,10 @@ public class AlarmReceiver extends BroadcastReceiver {
                     Log.d("Managing call state", "onCallStateChanged: idle");
                 }
                 break;
+                case TelephonyManager.CALL_STATE_OFFHOOK: {
+                    Log.d("Managing call state", "onCallStateChanged: offhook");
+                }
+                break;
             }
         }
     }

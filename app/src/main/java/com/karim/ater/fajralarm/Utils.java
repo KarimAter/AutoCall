@@ -197,10 +197,10 @@ class Utils {
     }
 
     // multiple number selector for contact dialog
-    static AlertDialog.Builder showDialog(Context context) {
+    static AlertDialog.Builder showDialog(Context context, String title) {
         final AlertDialog.Builder adb = new AlertDialog.Builder(context);
         adb.setNegativeButton("Cancel", null);
-        adb.setTitle("Select number");
+        adb.setTitle(title);
         return adb;
     }
 

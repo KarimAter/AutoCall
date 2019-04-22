@@ -1,6 +1,7 @@
 package com.karim.ater.fajralarm;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
@@ -8,22 +9,23 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CallingService extends Service implements StoppingServiceInterface {
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static SimpleDateFormat logFormat = new SimpleDateFormat("HH:mm:ss");
-    long offhookCal, idleCal, callDuration;
-    PhoneListener phoneListener = null;
-    TelephonyManager tm;
-    boolean initialIdleState = true;
-    Calendar newCalendar;
-    CallLogDetails contactCallLogDetails;
-    CallTimes callTimes;
-    String currentCallingNumber;
-    String TAG = getClass().getName();
+import static com.karim.ater.fajralarm.Constants.dateFormat;
+import static com.karim.ater.fajralarm.Constants.timeFormat;
+
+public class CallingService extends Service {
+
+    private long offhookCal;
+    private PhoneListener phoneListener = null;
+    private TelephonyManager tm;
+    private boolean initialIdleState = true;
+    private CallLogDetails contactCallLogDetails;
+    private CallTimes callTimes;
+    private String currentCallingNumber;
+    private String TAG = getClass().getName();
+    private Context context;
 
     @Override
     public void onCreate() {
@@ -31,10 +33,9 @@ public class CallingService extends Service implements StoppingServiceInterface 
         Log.d(TAG, "onCreate: " + "Service is created" + dateFormat.format(Calendar.getInstance().getTime()));
         contactCallLogDetails = new CallLogDetails();
         callTimes = new CallTimes();
-
-
         tm = (TelephonyManager) getApplicationContext().getSystemService(TELEPHONY_SERVICE);
         phoneListener = new PhoneListener();
+        context = getBaseContext();
     }
 
     @Override
@@ -45,72 +46,68 @@ public class CallingService extends Service implements StoppingServiceInterface 
         return START_NOT_STICKY;
     }
 
-    @Override
-    public void stopCallingService(CallingService callingService) {
-//        CallingService.this.stopSelf();
-//        tm.listen(phoneListener, PhoneStateListener.LISTEN_NONE);
-//        phoneListener = null;
-//        tm = null;
-//        Log.d(TAG, "Interface intervented.. ");
-
-    }
+//    @Override
+//    public void stopCallingService(CallingService callingService) {
+////        CallingService.this.stopSelf();
+////        tm.listen(phoneListener, PhoneStateListener.LISTEN_NONE);
+////        phoneListener = null;
+////        tm = null;
+////        Log.d(TAG, "Interface intervented.. ");
+////Todo: try handler to end calls
+//    }
 
     class PhoneListener extends PhoneStateListener {
 
-        StoppingServiceInterface stoppingServiceInterface = CallingService.this;
-        String offhookMsg, idleMsg, durationMsg, actionMsg, resultMsg;
+        //        StoppingServiceInterface stoppingServiceInterface = CallingService.this;
+        private String offhookMsg, idleMsg, durationMsg, actionMsg, resultMsg;
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             super.onCallStateChanged(state, incomingNumber);
-//            currentCallingNumber = Utils.getCurrentCallingNumber(getBaseContext());
             contactCallLogDetails.setContactName(currentCallingNumber);
-            DatabaseHelper dHelperr = new DatabaseHelper(getBaseContext());
 
+            DatabaseHelper dHelperr = new DatabaseHelper(context);
             ArrayList<CallTimes> previousCallTimes = dHelperr.getContactCallTimesLog(currentCallingNumber).getCallTimes();
+
             switch (state) {
                 case TelephonyManager.CALL_STATE_IDLE:
                     Log.d(TAG, "Phone inital idle State " + initialIdleState);
-                    DatabaseHelper databaseHelper = new DatabaseHelper(getBaseContext());
+                    DatabaseHelper databaseHelper = new DatabaseHelper(context);
                     if (!initialIdleState) {
-                        idleCal = Calendar.getInstance().getTimeInMillis();
+                        long idleCal = Calendar.getInstance().getTimeInMillis();
                         idleMsg = "Contact Number " + currentCallingNumber + " idleCal Fajr at " +
                                 dateFormat.format(Calendar.getInstance().getTime());
                         Log.d(TAG, idleMsg);
-                        callTimes.setEndTime(logFormat.format(Calendar.getInstance().getTime()));
+                        callTimes.setEndTime(timeFormat.format(Calendar.getInstance().getTime()));
                         int count = databaseHelper.getCallCount(currentCallingNumber);
-                        callDuration = (idleCal - offhookCal);
+                        long callDuration = (idleCal - offhookCal);
                         callTimes.setRingingDuration(String.valueOf(callDuration / 1000));
-                        // call duration exceeded the normal time
-//                        if (60000 > callDuration && callDuration > 59000) {
-//                            durationMsg = "Do nothing" + "Call duration was " + String.valueOf(callDuration / 1000.00);
-//                            Log.d(TAG, durationMsg);
-//                        }
-//
-//                        // if no or late answer from the receptor
-//                        else
+
+                        // if no or late answer from the receptor
+
                         if ((callDuration > 37000) & count > 0) {
                             durationMsg = "Call duration was " + String.valueOf(callDuration / 1000.00);
                             resultMsg = " Repeating Call for receptor " + currentCallingNumber + " ,Call# "
-                                    + String.valueOf(Utils.getCallsCount(getBaseContext()) - count);
+                                    + String.valueOf(Utils.getCallsCount(context) - count);
                             Log.d(TAG, durationMsg + "\n" + actionMsg);
 
                             int id = databaseHelper.getID(currentCallingNumber);
 
-                            newCalendar = Calendar.getInstance();
-                            String newCalendarString = Utils.getLastCallTime(getBaseContext());
-                            // assiging the time of the scheduled call
+                            Calendar newCalendar = Calendar.getInstance();
+                            String newCalendarString = Utils.getLastCallTime(context);
+                            // assigning the time of the scheduled call
                             try {
                                 newCalendar.setTime(dateFormat.parse(newCalendarString));
                                 newCalendar.add(Calendar.MINUTE, 1);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            Utils.setLastCallTime(getBaseContext(), dateFormat.format(newCalendar.getTime()));
+                            Utils.setLastCallTime(context, dateFormat.format(newCalendar.getTime()));
                             resultMsg = resultMsg +
-                                    "\n next Call is " + currentCallingNumber + " scheduled at " + logFormat.format(newCalendar.getTime());
+                                    "\n next Call is " + currentCallingNumber + " scheduled at " + timeFormat.format(newCalendar.getTime());
                             Log.d(TAG, resultMsg);
-                            Utils.setRecurringAlarm(getBaseContext(), currentCallingNumber, id, newCalendar);
+                            // scheduling the next call and updating time & count in database
+                            Utils.setRecurringAlarm(context, currentCallingNumber, id, newCalendar);
                             databaseHelper.setCallTime(currentCallingNumber, newCalendar);
                             databaseHelper.updateCallCount(currentCallingNumber, count - 1);
                         } else {
@@ -125,7 +122,7 @@ public class CallingService extends Service implements StoppingServiceInterface 
                                 Log.d(TAG, resultMsg);
                             }
                         }
-                        //
+                        // updating logs
                         previousCallTimes.add(callTimes);
                         contactCallLogDetails.setCallTimes(previousCallTimes);
                         contactCallLogDetails.setFinalStatus(resultMsg);
@@ -142,8 +139,7 @@ public class CallingService extends Service implements StoppingServiceInterface 
                     offhookMsg = "Contact Number " + currentCallingNumber + " offhookCal Fajr at "
                             + dateFormat.format(Calendar.getInstance().getTime());
                     Log.d(TAG, offhookMsg);
-                    callTimes.setStartTime(logFormat.format(Calendar.getInstance().getTime()));
-
+                    callTimes.setStartTime(timeFormat.format(Calendar.getInstance().getTime()));
                     break;
             }
         }
@@ -155,7 +151,7 @@ public class CallingService extends Service implements StoppingServiceInterface 
         tm.listen(phoneListener, PhoneStateListener.LISTEN_NONE);
         phoneListener = null;
         tm = null;
-        Log.d(TAG, "Interface intervented.. ");
+        Log.d(TAG, "OnDestroy: ");
     }
 
     @Override

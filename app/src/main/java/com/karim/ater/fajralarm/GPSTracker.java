@@ -3,6 +3,7 @@ package com.karim.ater.fajralarm;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -20,7 +22,7 @@ import android.support.v4.app.ActivityCompat;
 
 public class GPSTracker implements LocationListener {
 
-    private final Context context;
+    private final Activity activity;
 
     private boolean isGPSEnabled = false;
     private boolean isNetworkEnabled = false;
@@ -36,8 +38,8 @@ public class GPSTracker implements LocationListener {
 
     private LocationManager locationManager;
 
-    GPSTracker(Context context) {
-        this.context = context;
+    GPSTracker(Activity activity) {
+        this.activity = activity;
     }
 
     Location getLocation(Context context) {
@@ -51,6 +53,8 @@ public class GPSTracker implements LocationListener {
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // Todo:Show setting alert
+                if (Utils.getFajrPrayerTime(activity).isEmpty())
+                    showSettingsAlert();
             } else {
                 this.canGetLocation = true;
 
@@ -125,19 +129,19 @@ public class GPSTracker implements LocationListener {
         return this.canGetLocation;
     }
 
-    public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+    private void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
 
         alertDialog.setTitle("GPS is settings");
 
-        alertDialog.setMessage("Turn on your GPS to find nearby helpers");
+        alertDialog.setMessage("Turn on your GPS and internet to get fajr prayer time");
 
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                context.startActivity(intent);
+                activity.startActivity(intent);
             }
         });
 
@@ -171,6 +175,5 @@ public class GPSTracker implements LocationListener {
     public void onProviderEnabled(String arg0) {
 
     }
-
 
 }

@@ -81,8 +81,7 @@ public class SettingsActivity extends PreferenceActivity {
             backgroundPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if (!Utils.ignoringBatteryOptimization(getActivity()))
-                        Utils.startPowerSaverIntent(getActivity());
+                    Utils.startPowerSaverIntent(getActivity());
                     return true;
                 }
             });

@@ -34,5 +34,7 @@ public class Constants {
     static final int REQUEST_CODE_MULTIPLE_PERMISSIONS = 1;
     static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
     public static SimpleDateFormat hourDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-    static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+    static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+
+    static final String ADMOB_APP_ID = "ca-app-pub-6836093923955433~8387322372";
 }
