@@ -8,10 +8,11 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 
-public class Permissions {
+class Permissions {
 
 
-    public static void checkPermissions(Activity activity, String[] perms) {
+    // request system permission dialog and saves result
+    static void checkPermissions(Activity activity, String[] perms) {
         if (!hasPermissions(activity, perms)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(activity, perms, Constants.REQUEST_CODE_MULTIPLE_PERMISSIONS);
@@ -23,7 +24,7 @@ public class Permissions {
         }
     }
 
-
+    // check whether are permissions granted or not
     private static boolean hasPermissions(Context context, String[] permissions) {
         if (context != null && permissions != null) {
             for (String permission : permissions) {
@@ -35,14 +36,16 @@ public class Permissions {
         return true;
     }
 
-    public static void setPermissionsResult(Context context, int i, boolean result) {
+    // saving and getting permission results in sharedPrefs
+
+    static void setPermissionsResult(Context context, int i, boolean result) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("PermissionsResult" + i, result);
         editor.apply();
     }
 
-    public static boolean getPermissionsResult(Context context, int i) {
+    static boolean getPermissionsResult(Context context, int i) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean("PermissionsResult" + i, false);
     }

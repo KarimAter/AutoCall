@@ -22,35 +22,35 @@ public class GPSTracker implements LocationListener {
 
     private final Context context;
 
-    boolean isGPSEnabled = false;
-    boolean isNetworkEnabled = false;
-    public boolean canGetLocation = false;
+    private boolean isGPSEnabled = false;
+    private boolean isNetworkEnabled = false;
+    private boolean canGetLocation = false;
 
-    Location location;
+    private Location location;
 
-    double latitude;
-    double longitude;
+    private double latitude;
+    private double longitude;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
 
-    protected LocationManager locationManager;
+    private LocationManager locationManager;
 
-    public GPSTracker(Context context) {
+    GPSTracker(Context context) {
         this.context = context;
-//        getLocation(context);
     }
 
-    public Location getLocation(Context context) {
+    Location getLocation(Context context) {
         try {
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (locationManager != null) {
+                isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            }
 
             if (!isGPSEnabled && !isNetworkEnabled) {
-
+                // Todo:Show setting alert
             } else {
                 this.canGetLocation = true;
 
@@ -58,13 +58,6 @@ public class GPSTracker implements LocationListener {
 
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
                         return null;
                     }
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES,
@@ -72,22 +65,21 @@ public class GPSTracker implements LocationListener {
 
                     if (locationManager != null) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
                         if (location != null) {
-
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
                         }
                     }
 
                 }
-
                 if (isGPSEnabled) {
                     if (location == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                        if (locationManager != null) {
+                            locationManager.requestLocationUpdates(
+                                    LocationManager.GPS_PROVIDER,
+                                    MIN_TIME_BW_UPDATES,
+                                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                        }
                         if (locationManager != null) {
                             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
@@ -162,7 +154,6 @@ public class GPSTracker implements LocationListener {
 
     @Override
     public void onLocationChanged(Location arg0) {
-        // TODO Auto-generated method stub
 
     }
 
@@ -173,13 +164,11 @@ public class GPSTracker implements LocationListener {
 
     @Override
     public void onProviderDisabled(String arg0) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void onProviderEnabled(String arg0) {
-        // TODO Auto-generated method stub
 
     }
 

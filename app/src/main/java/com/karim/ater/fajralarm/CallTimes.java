@@ -3,29 +3,31 @@ package com.karim.ater.fajralarm;
 import android.support.annotation.NonNull;
 
 public class CallTimes {
+    // Start and end times and duration for each call
+
     private String startTime, endTime, ringingDuration;
 
-    public String getStartTime() {
+    String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
-    public String getRingingDuration() {
+    String getRingingDuration() {
         return ringingDuration;
     }
 
-    public void setRingingDuration(String ringingDuration) {
+    void setRingingDuration(String ringingDuration) {
         this.ringingDuration = ringingDuration;
     }
 

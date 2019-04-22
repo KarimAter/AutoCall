@@ -2,9 +2,7 @@ package com.karim.ater.fajralarm;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -22,7 +20,7 @@ public class CallingService extends Service implements StoppingServiceInterface 
     TelephonyManager tm;
     boolean initialIdleState = true;
     Calendar newCalendar;
-    CallDetails contactCallDetails;
+    CallLogDetails contactCallLogDetails;
     CallTimes callTimes;
     String currentCallingNumber;
     String TAG = getClass().getName();
@@ -31,7 +29,7 @@ public class CallingService extends Service implements StoppingServiceInterface 
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate: " + "Service is created" + dateFormat.format(Calendar.getInstance().getTime()));
-        contactCallDetails = new CallDetails();
+        contactCallLogDetails = new CallLogDetails();
         callTimes = new CallTimes();
 
 
@@ -66,7 +64,7 @@ public class CallingService extends Service implements StoppingServiceInterface 
         public void onCallStateChanged(int state, String incomingNumber) {
             super.onCallStateChanged(state, incomingNumber);
 //            currentCallingNumber = Utils.getCurrentCallingNumber(getBaseContext());
-            contactCallDetails.setContactName(currentCallingNumber);
+            contactCallLogDetails.setContactName(currentCallingNumber);
             DatabaseHelper dHelperr = new DatabaseHelper(getBaseContext());
 
             ArrayList<CallTimes> previousCallTimes = dHelperr.getContactCallTimesLog(currentCallingNumber).getCallTimes();
@@ -121,6 +119,7 @@ public class CallingService extends Service implements StoppingServiceInterface 
                                 resultMsg = "No answer from receptor: " + currentCallingNumber;
                                 Log.d(TAG, resultMsg);
                             } else {
+                                //Todo: Call cancelled by 'contactName' @ calendar
                                 // User has cancelled
                                 resultMsg = "Call is cancelled by receptor: " + currentCallingNumber;
                                 Log.d(TAG, resultMsg);
@@ -128,10 +127,10 @@ public class CallingService extends Service implements StoppingServiceInterface 
                         }
                         //
                         previousCallTimes.add(callTimes);
-                        contactCallDetails.setCallTimes(previousCallTimes);
-                        contactCallDetails.setFinalStatus(resultMsg);
+                        contactCallLogDetails.setCallTimes(previousCallTimes);
+                        contactCallLogDetails.setFinalStatus(resultMsg);
                         databaseHelper.updateContactLog(currentCallingNumber,
-                                contactCallDetails.toString());
+                                contactCallLogDetails.toString());
                         Log.d(TAG, "Ending the service.. ");
                         stopSelf();
 //                        stoppingServiceInterface.stopCallingService(CallingService.this);
@@ -161,7 +160,6 @@ public class CallingService extends Service implements StoppingServiceInterface 
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 

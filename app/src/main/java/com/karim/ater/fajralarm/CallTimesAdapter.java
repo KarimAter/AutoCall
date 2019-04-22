@@ -11,9 +11,11 @@ import java.util.ArrayList;
 
 public class CallTimesAdapter extends RecyclerView.Adapter<CallTimesAdapter.CallTimesViewHolder> {
 
-    ArrayList<CallTimes> callTimes;
+    // RecyclerView adapter of call times in call log detail
 
-    public CallTimesAdapter(ArrayList<CallTimes> callTimes) {
+    private ArrayList<CallTimes> callTimes;
+
+    CallTimesAdapter(ArrayList<CallTimes> callTimes) {
         this.callTimes = callTimes;
     }
 
@@ -38,14 +40,13 @@ public class CallTimesAdapter extends RecyclerView.Adapter<CallTimesAdapter.Call
     }
 
     class CallTimesViewHolder extends RecyclerView.ViewHolder {
-        View mView;
-        TextView callStartTimeTv;
-        TextView callEndTimeTv;
-        TextView callDurationTv;
+
+        private TextView callStartTimeTv;
+        private TextView callEndTimeTv;
+        private TextView callDurationTv;
 
         CallTimesViewHolder(View view) {
             super(view);
-            mView = view;
             callStartTimeTv = view.findViewById(R.id.callStartTimeTv);
             callEndTimeTv = view.findViewById(R.id.callEndTimeTv);
             callDurationTv = view.findViewById(R.id.callDurationTv);

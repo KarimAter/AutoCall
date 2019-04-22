@@ -4,21 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Contact implements Parcelable {
-
+    // Contact class
     private int contactId;
     private String contactName;
     private String contactNumber;
     private String contactCallTime;
     private String contactLog;
 
-
-//    Contact( String contactName, String contactNumber) {
-////        this.contactId = contactId;
-//        this.contactName = contactName;
-//        this.contactNumber = contactNumber;
-//        this.contactCallTime = "";
-//    }
-
+    // Constructor
     Contact(int contactId, String contactName, String contactNumber, String contactCallTime, String contactLog) {
         this.contactId = contactId;
         this.contactName = contactName;
@@ -27,48 +20,35 @@ public class Contact implements Parcelable {
         this.contactLog = contactLog;
     }
 
+    // Getters and Setters
+    String getContactLog() {
+        return contactLog;
+    }
+
+    int getContactId() {
+        return contactId;
+    }
+
+    String getContactName() {
+        return contactName;
+    }
+
+    String getContactNumber() {
+        return contactNumber;
+    }
+
+    String getContactCallTime() {
+        return contactCallTime;
+    }
+
+    // Making class parcelable
+
     private Contact(Parcel in) {
         contactId = in.readInt();
         contactName = in.readString();
         contactNumber = in.readString();
         contactCallTime = in.readString();
         contactLog = in.readString();
-    }
-
-    public String getContactLog() {
-        return contactLog;
-    }
-
-    public void setContactLog(String contactLog) {
-        this.contactLog = contactLog;
-    }
-
-    public int getContactId() {
-        return contactId;
-    }
-
-    public String getContactName() {
-        return contactName;
-    }
-
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
-
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
-    }
-
-    public String getContactCallTime() {
-        return contactCallTime;
-    }
-
-    public void setContactCallTime(String contactCallTime) {
-        this.contactCallTime = contactCallTime;
     }
 
     @Override

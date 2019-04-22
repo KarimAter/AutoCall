@@ -4,11 +4,12 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
-public class CallDetails {
+public class CallLogDetails {
+    // Log details for each contact
     private String contactName, finalStatus;
-    ArrayList<CallTimes> callTimes;
+    private ArrayList<CallTimes> callTimes;
 
-    public CallDetails() {
+    CallLogDetails() {
         callTimes = new ArrayList<>();
     }
 
@@ -16,23 +17,23 @@ public class CallDetails {
         return contactName;
     }
 
-    public void setContactName(String contactName) {
+    void setContactName(String contactName) {
         this.contactName = contactName;
     }
 
-    public String getFinalStatus() {
+    String getFinalStatus() {
         return finalStatus;
     }
 
-    public void setFinalStatus(String finalStatus) {
+    void setFinalStatus(String finalStatus) {
         this.finalStatus = finalStatus;
     }
 
-    public ArrayList<CallTimes> getCallTimes() {
+    ArrayList<CallTimes> getCallTimes() {
         return callTimes;
     }
 
-    public void setCallTimes(ArrayList<CallTimes> callTimes) {
+    void setCallTimes(ArrayList<CallTimes> callTimes) {
         this.callTimes = callTimes;
     }
 

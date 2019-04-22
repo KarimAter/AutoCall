@@ -12,14 +12,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.LogViewHolder> {
-
+    // Adapter of Logs RecyclerView
     private Context context;
-    private ArrayList<Contact> selectedContacts;
+    private ArrayList<Contact> contacts;
 
     LogsAdapter(Context context) {
         this.context = context;
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        this.selectedContacts = databaseHelper.loadContacts();
+        this.contacts = databaseHelper.loadContacts();
     }
 
     @NonNull
@@ -28,40 +28,39 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.LogViewHolder>
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.log_item, viewGroup, false);
         return new LogViewHolder(view);
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull LogViewHolder logViewHolder, int i) {
-        CallDetails callDetails = Utils.extractCallDetail(selectedContacts.get(i).getContactLog());
-        logViewHolder.logContactNameTv.setText(selectedContacts.get(i).getContactName());
-        logViewHolder.finalStatusTv.setText(callDetails.getFinalStatus());
+        Contact contact = contacts.get(i);
+        CallLogDetails callLogDetails = Utils.extractCallDetail(contact.getContactLog());
+        logViewHolder.logContactNameTv.setText(contact.getContactName());
+        logViewHolder.finalStatusTv.setText(callLogDetails.getFinalStatus());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         logViewHolder.callTimesRv.setLayoutManager(linearLayoutManager);
-        logViewHolder.callTimesRv.setAdapter(new CallTimesAdapter(callDetails.getCallTimes()));
         logViewHolder.callTimesRv.setHasFixedSize(true);
+        logViewHolder.callTimesRv.setAdapter(new CallTimesAdapter(callLogDetails.getCallTimes()));
+
     }
 
     @Override
     public int getItemCount() {
-        return selectedContacts.size();
+        return contacts.size();
     }
 
     class LogViewHolder extends RecyclerView.ViewHolder {
-        View mView;
-        TextView logContactNameTv;
-        TextView finalStatusTv;
-        RecyclerView callTimesRv;
+
+        private TextView logContactNameTv;
+        private TextView finalStatusTv;
+        private RecyclerView callTimesRv;
 
         LogViewHolder(View view) {
             super(view);
-            mView = view;
             logContactNameTv = view.findViewById(R.id.logContactNameTv);
             finalStatusTv = view.findViewById(R.id.finalStatusTv);
             callTimesRv = view.findViewById(R.id.callTimesRv);
-
         }
-
     }
+    // Todo: Dividers
 }

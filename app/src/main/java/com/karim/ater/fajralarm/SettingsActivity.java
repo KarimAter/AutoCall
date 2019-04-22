@@ -14,8 +14,19 @@ import java.util.Locale;
 
 
 public class SettingsActivity extends PreferenceActivity {
-    boolean changeLang;
+    // Class for handling application settings
+    private boolean changeLang;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // checks if language has been changed
+        changeLang = getIntent().getBooleanExtra("changLang", false);
+        MyPreferenceFragment fragment = new MyPreferenceFragment();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
+    }
+
+    // start Fagr activity again if language is modified
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -23,16 +34,7 @@ public class SettingsActivity extends PreferenceActivity {
             startActivity(new Intent(this, Fagr.class).
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             finish();
-
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        changeLang = getIntent().getBooleanExtra("changLang", false);
-        MyPreferenceFragment fragment = new MyPreferenceFragment();
-        getFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
     }
 
     public static class MyPreferenceFragment extends PreferenceFragment {
@@ -43,11 +45,12 @@ public class SettingsActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.preferences);
 
 
-            ListPreference langPreference = (ListPreference) findPreference("list_preference_1");
+            ListPreference langPreference = (ListPreference) findPreference("language_preference");
             langPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
                     setLocale(o.toString());
+                    // change language and refresh settings activity
                     Intent refresh = new Intent(getActivity(), SettingsActivity.class);
                     refresh.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     refresh.putExtra("changLang", true);
@@ -56,7 +59,7 @@ public class SettingsActivity extends PreferenceActivity {
                 }
             });
 
-            ListPreference callCountPreference = (ListPreference) findPreference("list_preference_2");
+            ListPreference callCountPreference = (ListPreference) findPreference("call_count_preference");
             callCountPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
@@ -65,7 +68,7 @@ public class SettingsActivity extends PreferenceActivity {
                 }
             });
 
-            ListPreference fajrMethodPreference = (ListPreference) findPreference("list_preference_3");
+            ListPreference fajrMethodPreference = (ListPreference) findPreference("fajr_method_preference");
             fajrMethodPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
@@ -85,6 +88,7 @@ public class SettingsActivity extends PreferenceActivity {
             });
         }
 
+        // setting default locale according to selected language
         public void setLocale(String lang) {
             Locale myLocale = new Locale(lang);
             Locale.setDefault(myLocale);
