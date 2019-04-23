@@ -58,7 +58,7 @@ public class CallingService extends Service {
 
     class PhoneListener extends PhoneStateListener {
 
-        //        StoppingServiceInterface stoppingServiceInterface = CallingService.this;
+        //        Refresher stoppingServiceInterface = CallingService.this;
         private String offhookMsg, idleMsg, durationMsg, actionMsg, resultMsg;
 
         @Override

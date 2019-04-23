@@ -3,13 +3,16 @@ package com.karim.ater.fajralarm;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +37,12 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import static com.karim.ater.fajralarm.Constants.dateFormat;
+import static com.karim.ater.fajralarm.Constants.timeFormat;
 
 public class HomeFragment extends Fragment {
     private String TAG = Fagr.class.getSimpleName();
@@ -49,8 +54,8 @@ public class HomeFragment extends Fragment {
     private ArrayList<Contact> selectedContacts = new ArrayList<>();
     private AdView mAdView;
     private Context context;
-    private boolean timeDifference;
     private Location lastLocation;
+    private FragmentActivity activity;
 
     @Override
     public void onPause() {
@@ -73,13 +78,13 @@ public class HomeFragment extends Fragment {
             makeJsonObjReq();
             setFajrTimeTv();
         }
-
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
+        activity = getActivity();
     }
 
     @Override
@@ -94,8 +99,10 @@ public class HomeFragment extends Fragment {
                     // check the calling permission
                     boolean permissionsResult = Permissions.getPermissionsResult(context, 0);
                     if (permissionsResult) {
+                        // Todo: unhash
 //                        if (timeDifference) {
                         getTime();
+                        String firstAlarmTime = Utils.convertCalendarToString(calendar, dateFormat);
                         callCalendar = calendar;
                         // resetting call counts to default value and clearing old logs
                         DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -114,10 +121,24 @@ public class HomeFragment extends Fragment {
                                 callCalendar.add(Calendar.MINUTE, 1);
                         }
                         Utils.setLastCallTime(context, dateFormat.format(callCalendar.getTime()));
-                        Toast.makeText(context, context.getResources().getString(R.string.SetAlarmAction)
-                                + dateFormat.format(calendar.getTime()), Toast.LENGTH_LONG).show();
+
+                        // showing snack bar with Undo option
+                        Snackbar snackbar = Snackbar
+                                .make(activity.findViewById(R.id.mCoordinatorLo),
+                                        getString(R.string.SetAlarmAction) + firstAlarmTime, Snackbar.LENGTH_LONG);
+                        snackbar.setAction(getString(R.string.UndoAction), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // undo is selected, restore the deleted item
+                                CancellingAlarms();
+                            }
+                        });
+                        snackbar.setActionTextColor(Color.YELLOW);
+                        snackbar.show();
+//                        Toast.makeText(context, context.getResources().getString(R.string.SetAlarmAction)
+//                                + dateFormat.format(calendar.getTime()), Toast.LENGTH_LONG).show();
 //                        }
-//                        else Toast.makeText(context, "Alarms should be before or after Fajr time by 30 minutes",
+//                        else Toast.makeText(context, R.string.AlarmTimingMessage,
 //                                Toast.LENGTH_LONG).show();
                     } else {
                         // Request permissions
@@ -130,18 +151,23 @@ public class HomeFragment extends Fragment {
             cancelAlarmBu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //Todo:Snack here and up
                     // Stopping the alarms
-                    DatabaseHelper databaseHelper = new DatabaseHelper(context);
-                    ArrayList<Contact> currentContacts = databaseHelper.loadContacts();
-                    for (int i = 0; i < currentContacts.size(); i++) {
-                        Utils.stopAlarms(context, currentContacts.get(i).getContactNumber(), currentContacts.get(i).getContactId());
-                    }
-                    databaseHelper.resetCallsTime();
+                    CancellingAlarms();
                 }
             });
 
         }
         return view;
+    }
+
+    private void CancellingAlarms() {
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        ArrayList<Contact> currentContacts = databaseHelper.loadContacts();
+        for (int i = 0; i < currentContacts.size(); i++) {
+            Utils.stopAlarms(context, currentContacts.get(i).getContactNumber(), currentContacts.get(i).getContactId());
+        }
+        databaseHelper.resetCallsTime();
     }
 
     private void gettingLocation() {
@@ -170,7 +196,7 @@ public class HomeFragment extends Fragment {
                         Gson gson = new Gson();
                         ResponseClass currentResponse = gson.fromJson(response.toString(), ResponseClass.class);
                         String fajrPrayerTime = currentResponse.getData().getTimings().getFajr();
-                        Toast.makeText(context, fajrPrayerTime, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(context, fajrPrayerTime, Toast.LENGTH_LONG).show();
                         Utils.setFajrPrayerTime(context, fajrPrayerTime);
                         fajrTimeTv.setText(fajrPrayerTime);
                         fajrTimeTv.setVisibility(View.VISIBLE);
@@ -256,8 +282,8 @@ public class HomeFragment extends Fragment {
             hour = timePicker.getCurrentHour();
             minute = timePicker.getCurrentMinute();
         }
-        timeDifference = compareTimeToFajr(hour, minute);
-        Toast.makeText(context, String.valueOf(timeDifference), Toast.LENGTH_LONG).show();
+        boolean timeDifference = compareTimeToFajr(hour, minute);
+        Toast.makeText(context, String.valueOf(timeDifference), Toast.LENGTH_SHORT).show();
 
         calendar = Calendar.getInstance();
         Calendar currentCalendar = Calendar.getInstance();
@@ -274,17 +300,20 @@ public class HomeFragment extends Fragment {
 
     //Todo: Dont set alarms if not within 30 minutes in full version
     private boolean compareTimeToFajr(int hour, int minute) {
-        Calendar calendar111 = Calendar.getInstance();
-        calendar111.set(Calendar.HOUR_OF_DAY, hour);
-        calendar111.set(Calendar.MINUTE, minute);
-        Calendar calendar112 = Calendar.getInstance();
+        Calendar selectedAlarmTime = Calendar.getInstance();
+        selectedAlarmTime.set(Calendar.HOUR_OF_DAY, hour);
+        selectedAlarmTime.set(Calendar.MINUTE, minute);
+        Calendar savedFajrTime = Calendar.getInstance();
         String fajrPrayerTime = Utils.getFajrPrayerTime(context);
-        if (fajrPrayerTime.isEmpty())
-            return true;
+        if (fajrPrayerTime.isEmpty()) {
+            Calendar midnightCal = Utils.convertStringToCalendar("00:00:00", timeFormat);
+            Calendar sunriseCal = Utils.convertStringToCalendar("06:00:00", timeFormat);
+            return (selectedAlarmTime.after(midnightCal) && selectedAlarmTime.before(sunriseCal));
+        }
         String[] parts = fajrPrayerTime.split(":");
-        calendar112.set(Calendar.HOUR_OF_DAY, Integer.valueOf(parts[0]));
-        calendar112.set(Calendar.MINUTE, Integer.valueOf(parts[1]));
-        long diff = Math.abs(calendar112.getTime().getTime() - calendar111.getTime().getTime());
+        savedFajrTime.set(Calendar.HOUR_OF_DAY, Integer.valueOf(parts[0]));
+        savedFajrTime.set(Calendar.MINUTE, Integer.valueOf(parts[1]));
+        long diff = Math.abs(savedFajrTime.getTime().getTime() - selectedAlarmTime.getTime().getTime());
         return diff < 30000 * 60 || diff == 30000 * 60;
 
     }

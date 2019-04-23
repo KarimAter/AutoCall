@@ -20,12 +20,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ContactsFragment extends Fragment {
+public class ContactsFragment extends Fragment implements Refresher {
     // Contacts Fragment class
     private View view = null;
-    private RecyclerView contactsRv;
-    private ContactsAdapter contactsAdapter;
+    RecyclerView contactsRv;
+    ContactsAdapter contactsAdapter;
     private Activity activity;
+    ArrayList<Contact> contacts;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +40,9 @@ public class ContactsFragment extends Fragment {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_contacts, container, false);
             contactsRv = view.findViewById(R.id.contactsRv);
-            contactsAdapter = new ContactsAdapter(activity);
+            DatabaseHelper databaseHelper = new DatabaseHelper(activity);
+            contacts = databaseHelper.loadContacts();
+            contactsAdapter = new ContactsAdapter(activity, contacts);
             contactsRv.setAdapter(contactsAdapter);
             contactsRv.setLayoutManager(new LinearLayoutManager(activity));
             dragAndDrop();
@@ -75,15 +78,20 @@ public class ContactsFragment extends Fragment {
                                     // notify list with deletion
                                     contactsAdapter.notifyItemRemoved(contactPosition);
 
-                                    //Stop deleted contact alarm is deletion is performed after settin an alarm
+                                    //Stop deleted contact alarm is deletion is performed after setting an alarm
                                     Utils.stopAlarms(activity, contactNumber, contact.getContactId());
 
                                     // showing snack bar with Undo option
+
+
+                                    String snackMsg = String.format(" %s " + getString(R.string.DeleteContactAction), contactName);
                                     Snackbar snackbar = Snackbar
                                             .make(activity.findViewById(R.id.mCoordinatorLo),
-                                                    contactName + " " + activity.getResources().getString(R.string.DeleteContactAction),
+                                                    snackMsg,
                                                     Snackbar.LENGTH_LONG);
-                                    snackbar.setAction("Undo", new View.OnClickListener() {
+                                    snackbar.getView().setTextDirection(View.TEXT_DIRECTION_LOCALE);
+
+                                    snackbar.setAction(getString(R.string.UndoAction), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             // undo is selected, restore the deleted item
@@ -126,4 +134,13 @@ public class ContactsFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(contactsRv);
     }
 
+    @Override
+    public void refresh(String name, String number) {
+        contacts = new DatabaseHelper(activity).loadContacts();
+        contactsAdapter = new ContactsAdapter(activity, contacts);
+        contactsAdapter.deleteContact(name, number);
+        contactsAdapter.notifyDataSetChanged();
+        contactsRv.setAdapter(contactsAdapter);
+
+    }
 }

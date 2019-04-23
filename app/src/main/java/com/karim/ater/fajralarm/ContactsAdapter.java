@@ -17,10 +17,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     private Context context;
 
     // Constructor
-    ContactsAdapter(Context context) {
+    ContactsAdapter(Context context, ArrayList<Contact> contacts) {
         this.context = context;
-        DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        this.contacts = databaseHelper.loadContacts();
+        this.contacts = contacts;
     }
 
     // Getter
@@ -63,6 +62,16 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         notifyItemInserted(position);
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         databaseHelper.reorder(contacts);
+    }
+
+    // Undo deleting contact method
+    void deleteContact(String name, String number) {
+//        contacts.remove(pos);
+//        // notify item added by position
+//        notifyItemRemoved(pos);
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        databaseHelper.deleteContact(name, number);
+        notifyDataSetChanged();
     }
 
     // RecyclerView viewholder class

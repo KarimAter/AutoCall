@@ -1,21 +1,39 @@
 <resources>
     <string name="app_name">FajrCaller</string>
-
-    <string name="setAlarmButtonText">Set Alarm</string>
+    <string name="setAlarmButtonText">Set Alarms</string>
     <string name="stopAlarmButtonText">Stop Alarms</string>
     <string name="Settings">Settings</string>
     <string name="Language">Language</string>
     <string name="CallCount">Number of calls</string>
     <string name="FajrMethod">Fajr prayer calculation method</string>
-    <string name="LanguageSummary">Change language settings</string>
-    <string name="CallCountSummary">Select the number of waking calls</string>
-    <string name="FajrMethodSummary">Select fajr prayer time calculation method</string>
+    <string name="StopBatterOpt">Stop Battery Optimization</string>
+    <string name="LanguagePref">Change language settings</string>
+    <string name="CallCountPref">Select the number of waking calls</string>
+    <string name="FajrMethodPref">Select fajr prayer time calculation method</string>
+    <string name="StopBatterOptPref">Allow Fajr alarm to work in background to function properly</string>
+    <string name="StopBatterOptPrefDialogMsg">requires to be enabled in Protected Apps to function properly</string>
     <string name="HomeButton">Home</string>
     <string name="ContactsButton">Contacts</string>
+    <string name="LogsButton">Logs</string>
     <string name="DeleteContactAction"> has been removed from contacts</string>
+    <string name="AddContactAction"> has been added to contacts</string>
     <string name="SetAlarmAction"> Fajr waking calls will start at </string>
     <string name="MaxContactsMessage"> You cannot add more than 10 contacts </string>
     <string name="ExistingNumberMessage"> Number already exists </string>
-    <string name="LogsButton">Logs</string>
+    <string name="UndoAction"> Undo </string>
+    <string name="NumbersSelectionDialogTitle">Select number</string>
+    <string name="ForeverDeniedPermsMessage">You have forcefully denied some of the required permissions
+    for this action. Please open settings, go to permissions and allow them.</string>
+    <string name="ForeverDeniedPermsTitle">Permissions Required</string>
+    <string name="CancelButton">Cancel</string>
+    <string name="AlarmTimingMessage">Calls should be scheduled before or after Fajr prayer time by 30 minutes</string>
+    <string name="contactNameTvText">Contact Name</string>
+    <string name="contactNumberTvText">Contact Number</string>
+    <string name="callTimeTvText">Call Time</string>
+    <string name="NoLogs">There are no active logs yet.</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="ringing_duration">Ringing Duration</string>
+
 
 </resources>

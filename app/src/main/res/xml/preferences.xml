@@ -7,26 +7,32 @@
         android:defaultValue="1"
         android:entries="@array/LanguageArray"
         android:entryValues="@array/LanguageArrayValues"
+        android:icon="@drawable/ic_language_black_24dp"
         android:key="language_preference"
-        android:summary="@string/LanguageSummary"
+        android:summary="@string/LanguagePref"
         android:title="@string/Language" />
     <ListPreference
         android:defaultValue="4"
         android:entries="@array/NumberOfCallsArray"
         android:entryValues="@array/NumberOfCallsArrayValues"
+        android:icon="@drawable/ic_looks_4_black_24dp"
         android:key="call_count_preference"
-        android:summary="@string/CallCountSummary"
+        android:summary="@string/CallCountPref"
         android:title="@string/CallCount" />
     <ListPreference
         android:defaultValue="5"
         android:entries="@array/FajrMethodsArray"
         android:entryValues="@array/FajrMethodsArrayValues"
+        android:icon="@drawable/ic_access_time_black_24dp"
         android:key="fajr_method_preference"
-        android:summary="@string/FajrMethodSummary"
+        android:summary="@string/FajrMethodPref"
         android:title="@string/FajrMethod" />
     <Preference
+        android:icon="@drawable/ic_battery_full_black_24dp"
         android:key="stopBatteryOptimization"
-        android:title="Stop Battery Optimization"
-        android:summary="Allow Fajr alarm to work in background to function properly"></Preference>
+        android:summary="@string/StopBatterOptPref"
+        android:title="@string/StopBatterOpt">
+
+    </Preference>
 
 </PreferenceScreen>

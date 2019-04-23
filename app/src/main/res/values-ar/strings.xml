@@ -1,18 +1,37 @@
 <resources>
     <string name="app_name">متصل الفجر</string>
-
     <string name="setAlarmButtonText">تشغيل</string>
     <string name="stopAlarmButtonText">إلغاء</string>
-    <string name="Settings">الاعدادات</string>
+    <string name="Settings">الإعدادات</string>
     <string name="Language">اللغة</string>
     <string name="CallCount">عدد المكالمات</string>
     <string name="FajrMethod">طريقة حساب توقيت الفجر</string>
-    <string name="LanguageSummary">اختر اللغة </string>
-    <string name="CallCountSummary">اختر عدد مكالمات الإيقاظ</string>
-    <string name="FajrMethodSummary">اختر طريقة حساب توقيت الفجر</string>
+    <string name="StopBatterOpt">إلغاء توفير الطاقة</string>
+    <string name="LanguagePref">اختر اللغة </string>
+    <string name="CallCountPref">اختر عدد مكالمات الإيقاظ</string>
+    <string name="FajrMethodPref">اختر طريقة حساب توقيت الفجر</string>
+    <string name="StopBatterOptPref">اجعل متصل الفجر تعمل في الخلفية لتعمل بشكل صحيح</string>
+    <string name="StopBatterOptPrefDialogMsg">لا بد أن تكون متاحة في التطبيقات المحمية حتي تعمل بشكل صحيح</string>
     <string name="HomeButton">الرئيسية</string>
-    <string name="ContactsButton">قائمة المكالمات</string>
+    <string name="ContactsButton">الأرقام</string>
+    <string name="LogsButton">المكالمات</string>
     <string name="DeleteContactAction"> تم إزالته من القائمة</string>
+    <string name="AddContactAction"> تم إضافته إلي القائمة</string>
+    <string name="SetAlarmAction"> مكالمات الفجر ستبدأ في </string>
     <string name="MaxContactsMessage"> لا تستطيع زيادة اكثر من 10 أشخاص </string>
     <string name="ExistingNumberMessage"> هذا الرقم موجود بالفعل </string>
+    <string name="UndoAction"> إلغاء </string>
+    <string name="NumbersSelectionDialogTitle">اختيار الرقم</string>
+    <string name="ForeverDeniedPermsMessage">لقد رفضت نهائيا بعض التراخيص المطلوبة, من فضلك اذهب الي الإعدادات و أعد فتحها</string>
+    <string name="ForeverDeniedPermsTitle">تراخيص المطلوبة</string>
+    <string name="CancelButton">إلغاء</string>
+    <string name="AlarmTimingMessage">المكالمات لا بد ان تكون قبل أو بعد آذان الفجر ب 30 دقيقة</string>
+    <string name="contactNameTvText">الإسم</string>
+    <string name="contactNumberTvText">الرقم</string>
+    <string name="callTimeTvText">وقت الإتصال</string>
+    <string name="NoLogs">لا يوجد سجل للمكالمات الآن.</string>
+    <string name="start_time">بدابة المكالمة</string>
+    <string name="end_time">نهاية المكالمة</string>
+    <string name="ringing_duration">مدة المكالمة</string>
+
 </resources>

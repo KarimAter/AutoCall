@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,6 +15,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -30,7 +32,6 @@ import java.util.Locale;
 
 public class Fagr extends AppCompatActivity {
     private Fragment fragment = null;
-    private BottomNavigationView bottomNavigationView;
     private FloatingActionButton addContactFab;
     private int contactsCount;
     private static final int PICK_CONTACT = 44;
@@ -39,8 +40,9 @@ public class Fagr extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         // Change Language if it has been changed
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String value = prefs.getString("language_preference", "en");
+//        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        String defaultLang = Locale.getDefault().getLanguage();
+        String value = Utils.getLocale(this);
         Locale myLocale = new Locale(value);
         Locale.setDefault(myLocale);
         android.content.res.Configuration config = new android.content.res.Configuration();
@@ -54,7 +56,7 @@ public class Fagr extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fagr);
-        bottomNavigationView = findViewById(R.id.bottomNav);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
         addContactFab = findViewById(R.id.fab);
         fragment = new HomeFragment();
 
@@ -107,7 +109,6 @@ public class Fagr extends AppCompatActivity {
                             fragment = new LogsFragment();
                         break;
                 }
-
                 loadFragment(fragment);
                 return false;
             }
@@ -138,10 +139,13 @@ public class Fagr extends AppCompatActivity {
         }
     }
 
-    private void pickingContact(Intent data) {
+    private void pickingContact(final Intent data) {
         Uri contactData = data.getData();
-        Cursor cursor = getContentResolver().query(contactData,
-                null, null, null, null);
+        Cursor cursor = null;
+        if (contactData != null) {
+            cursor = getContentResolver().query(contactData,
+                    null, null, null, null);
+        }
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 final String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
@@ -160,24 +164,59 @@ public class Fagr extends AppCompatActivity {
                     }
                     // If contact has one number only
                     if (contactNumbers.size() == 1) {
-                        DatabaseHelper databaseHelper = new DatabaseHelper(Fagr.this);
+                        final DatabaseHelper databaseHelper = new DatabaseHelper(Fagr.this);
                         boolean check = databaseHelper.addContact(name, contactNumbers.get(0));
-                        if (!check)
-                            Toast.makeText(getBaseContext(), "Number already exists", Toast.LENGTH_LONG).show();
+                        if (check) {// showing snack bar with Undo option
+                            String snackMsg = String.format(" %s " + getString(R.string.AddContactAction), name);
+                            Snackbar snackbar = Snackbar
+                                    .make(this.findViewById(R.id.mCoordinatorLo),
+                                            snackMsg,
+                                            Snackbar.LENGTH_LONG);
+                            snackbar.getView().setTextDirection(View.TEXT_DIRECTION_LOCALE);
+                            snackbar.setAction(getString(R.string.UndoAction), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // undo adding the contact
+                                    databaseHelper.deleteContact(name, contactNumbers.get(0));
+                                    loadFragment(fragment);
+                                }
+                            });
+                            snackbar.setActionTextColor(Color.YELLOW);
+                            snackbar.show();
+                        } else
+                            Toast.makeText(getBaseContext(), getString(R.string.ExistingNumberMessage),
+                                    Toast.LENGTH_LONG).show();
                     } else
                     // If contact has more than one number
                     {
                         // Show number selector dialog
-                        AlertDialog.Builder dialog = Utils.showDialog(this, "Select number");
+                        AlertDialog.Builder dialog = Utils.showDialog(this, getString(R.string.NumbersSelectionDialogTitle));
                         dialog.setSingleChoiceItems(contactNumbers.toArray(new CharSequence[contactNumbers.size()]),
                                 0, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(DialogInterface d, int n) {
+                                    public void onClick(DialogInterface d, final int n) {
                                         Log.d("Dialog", "onClick: " + contactNumbers.get(n));
-                                        DatabaseHelper databaseHelper = new DatabaseHelper(Fagr.this);
+                                        final DatabaseHelper databaseHelper = new DatabaseHelper(Fagr.this);
                                         boolean check = databaseHelper.addContact(name, contactNumbers.get(n));
-                                        if (!check)
-                                            Toast.makeText(getBaseContext(), getResources().getString(R.string.ExistingNumberMessage),
+                                        if (check) {// showing snack bar with Undo option
+                                            String snackMsg = String.format(" %s " + getString(R.string.AddContactAction), name);
+                                            Snackbar snackbar = Snackbar
+                                                    .make(Fagr.this.findViewById(R.id.mCoordinatorLo),
+                                                            snackMsg,
+                                                            Snackbar.LENGTH_LONG);
+                                            snackbar.getView().setTextDirection(View.TEXT_DIRECTION_LOCALE);
+                                            snackbar.setAction(getString(R.string.UndoAction), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    // undo adding the contact
+                                                    databaseHelper.deleteContact(name, contactNumbers.get(n));
+                                                    loadFragment(fragment);
+                                                }
+                                            });
+                                            snackbar.setActionTextColor(Color.YELLOW);
+                                            snackbar.show();
+                                        } else
+                                            Toast.makeText(getBaseContext(), getString(R.string.ExistingNumberMessage),
                                                     Toast.LENGTH_LONG).show();
                                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                                         ft.replace(R.id.frame, new ContactsFragment());
@@ -196,7 +235,9 @@ public class Fagr extends AppCompatActivity {
                     numberCursor.close();
                 }
             }
+            cursor.close();
         }
+
     }
 
     @Override
@@ -248,10 +289,9 @@ public class Fagr extends AppCompatActivity {
             // Dialog to apps permissions setting if permissions are denied forever
             if (somePermissionsForeverDenied) {
                 final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle("Permissions Required")
-                        .setMessage("You have forcefully denied some of the required permissions " +
-                                "for this action. Please open settings, go to permissions and allow them.")
-                        .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setTitle(R.string.ForeverDeniedPermsTitle)
+                        .setMessage(getString(R.string.ForeverDeniedPermsMessage))
+                        .setPositiveButton(getString(R.string.Settings), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -260,7 +300,7 @@ public class Fagr extends AppCompatActivity {
                                 startActivity(intent);
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.CancelButton), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 for (int i = 0, len = Constants.ALL_PERMISSIONS.length; i < len; i++) {

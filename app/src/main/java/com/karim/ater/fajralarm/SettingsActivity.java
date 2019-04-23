@@ -50,6 +50,7 @@ public class SettingsActivity extends PreferenceActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
                     setLocale(o.toString());
+                    Utils.setLocale(getActivity(), o.toString());
                     // change language and refresh settings activity
                     Intent refresh = new Intent(getActivity(), SettingsActivity.class);
                     refresh.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

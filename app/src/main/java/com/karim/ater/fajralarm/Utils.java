@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 
 class Utils {
@@ -89,8 +90,9 @@ class Utils {
                 Log.d("Power", "startPowerSaverIntent: selection list");
                 new AlertDialog.Builder(context)
                         .setTitle(Build.MANUFACTURER + " Protected Apps")
-                        .setMessage(String.format("%s requires to be enabled in 'Protected Apps' to function properly.%n", context.getString(R.string.app_name)))
-                        .setPositiveButton("Go to settings", new DialogInterface.OnClickListener() {
+//                        .setMessage(String.format("%s requires to be enabled in 'Protected Apps' to function properly.%n", context.getString(R.string.app_name)))
+                        .setMessage(String.format("%s " + context.getString(R.string.StopBatterOptPrefDialogMsg) + "%n", context.getString(R.string.app_name)))
+                        .setPositiveButton(context.getString(R.string.Settings), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 context.startActivity(intent);
                             }
@@ -206,7 +208,7 @@ class Utils {
 
     // Calendar conversion methods
 
-    public static String convertCalendarToString(Calendar calendar, SimpleDateFormat dateFormat) {
+    static String convertCalendarToString(Calendar calendar, SimpleDateFormat dateFormat) {
         return dateFormat.format(calendar.getTime());
     }
 
@@ -329,6 +331,19 @@ class Utils {
     static Float getLongitude(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getFloat("Longitude", 1000f);
+    }
+
+    static String getLocale(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String defaultLang = Locale.getDefault().getLanguage();
+        return preferences.getString("Locale", defaultLang);
+    }
+
+    static void setLocale(Context context, String locale) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Locale", locale);
+        editor.apply();
     }
 }
 
