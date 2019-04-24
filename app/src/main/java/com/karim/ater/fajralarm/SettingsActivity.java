@@ -8,18 +8,20 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 
 import java.util.Locale;
 
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends AppCompatActivity {
     // Class for handling application settings
     private boolean changeLang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.Settings);
         // checks if language has been changed
         changeLang = getIntent().getBooleanExtra("changLang", false);
         MyPreferenceFragment fragment = new MyPreferenceFragment();

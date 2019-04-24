@@ -158,6 +158,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
+    // get contact name from contact number
+    String getContactName(String currentCallingNumber) {
+        String contactName = "";
+        String query = "Select " + CONTACT_NAME + " FROM " + CONTACTS_TABLE +
+                " WHERE " + CONTACT_NUMBER + " = '" + currentCallingNumber + "'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            contactName = cursor.getString(0);
+            cursor.close();
+        }
+        return contactName;
+    }
+
     // Getting contact Id
     int getID(String contactNumber) {
         int id = 0;
@@ -236,5 +250,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(query);
         db.close();
 
+    }
+
+
+    ArrayList<Contact> loadContactsLogs() {
+
+        ArrayList<Contact> contacts = new ArrayList<>();
+        String query = "Select * FROM " + CONTACTS_TABLE + " where " + CONTACT_LOG + " != '' Order by " + ID + " ASC ";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            contacts.add(new Contact(cursor.getInt(0), cursor.getString(1),
+                    cursor.getString(2), cursor.getString(3), cursor.getString(5)));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return contacts;
     }
 }

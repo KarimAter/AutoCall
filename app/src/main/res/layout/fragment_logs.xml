@@ -6,16 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".ContactsFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/logsRv"
-        android:name="com.karim.ater.fajralarm.LogsFragment"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        tools:context=".LogsFragment"
-        tools:listitem="@layout/fragment_contact">
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/logsRv"
+            android:name="com.karim.ater.fajralarm.LogsFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".LogsFragment"
+            tools:listitem="@layout/fragment_contact">
+
+        </android.support.v7.widget.RecyclerView>
+    </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

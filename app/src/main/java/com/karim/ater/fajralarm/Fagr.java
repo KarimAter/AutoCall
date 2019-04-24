@@ -1,15 +1,12 @@
 package com.karim.ater.fajralarm;
 
-import android.app.AlertDialog;
+
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -19,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -28,7 +26,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class Fagr extends AppCompatActivity {
     private Fragment fragment = null;
@@ -39,17 +36,8 @@ public class Fagr extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        // Change Language if it has been changed
-//        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        String defaultLang = Locale.getDefault().getLanguage();
-        String value = Utils.getLocale(this);
-        Locale myLocale = new Locale(value);
-        Locale.setDefault(myLocale);
-        android.content.res.Configuration config = new android.content.res.Configuration();
-        config.locale = myLocale;
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        Utils.updateLocale(this);
         setTitle(R.string.app_name);
-
     }
 
     @Override
@@ -181,7 +169,6 @@ public class Fagr extends AppCompatActivity {
                                     loadFragment(fragment);
                                 }
                             });
-                            snackbar.setActionTextColor(Color.YELLOW);
                             snackbar.show();
                         } else
                             Toast.makeText(getBaseContext(), getString(R.string.ExistingNumberMessage),
@@ -213,7 +200,6 @@ public class Fagr extends AppCompatActivity {
                                                     loadFragment(fragment);
                                                 }
                                             });
-                                            snackbar.setActionTextColor(Color.YELLOW);
                                             snackbar.show();
                                         } else
                                             Toast.makeText(getBaseContext(), getString(R.string.ExistingNumberMessage),

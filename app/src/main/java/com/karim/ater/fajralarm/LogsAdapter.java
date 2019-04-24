@@ -19,7 +19,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.LogViewHolder>
     LogsAdapter(Context context) {
         this.context = context;
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        this.contacts = databaseHelper.loadContacts();
+        this.contacts = databaseHelper.loadContactsLogs();
     }
 
     @NonNull
@@ -59,6 +59,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.LogViewHolder>
             super(view);
             logContactNameTv = view.findViewById(R.id.logContactNameTv);
             finalStatusTv = view.findViewById(R.id.finalStatusTv);
+            finalStatusTv.setTextDirection(View.TEXT_DIRECTION_LOCALE);
             callTimesRv = view.findViewById(R.id.callTimesRv);
         }
     }

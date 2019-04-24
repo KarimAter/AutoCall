@@ -1,7 +1,6 @@
 package com.karim.ater.fajralarm;
 
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,11 +8,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -83,14 +81,13 @@ class Utils {
 
     // go to setting depending on phone type
     static void startPowerSaverIntent(final Context context) {
-
-
         for (final Intent intent : Constants.POWERMANAGER_INTENTS) {
             if (isCallable(context, intent)) {
                 Log.d("Power", "startPowerSaverIntent: selection list");
-                new AlertDialog.Builder(context)
-                        .setTitle(Build.MANUFACTURER + " Protected Apps")
-//                        .setMessage(String.format("%s requires to be enabled in 'Protected Apps' to function properly.%n", context.getString(R.string.app_name)))
+                AlertDialog.Builder adb = new AlertDialog.Builder(context);
+                String manufacturerName = Build.MANUFACTURER;
+                manufacturerName = manufacturerName.substring(0, 1).toUpperCase() + manufacturerName.substring(1);
+                adb.setTitle(manufacturerName + " " + context.getString(R.string.protectedApps))
                         .setMessage(String.format("%s " + context.getString(R.string.StopBatterOptPrefDialogMsg) + "%n", context.getString(R.string.app_name)))
                         .setPositiveButton(context.getString(R.string.Settings), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -103,7 +100,6 @@ class Utils {
                                 dialog.dismiss();
                             }
                         })
-                        .setCancelable(false)
                         .show();
                 break;
             }
@@ -344,6 +340,33 @@ class Utils {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Locale", locale);
         editor.apply();
+    }
+
+    static void updateLocale(Context context) {
+        String value = Utils.getLocale(context);
+        Locale myLocale = new Locale(value);
+        Locale.setDefault(myLocale);
+        android.content.res.Configuration config = new android.content.res.Configuration();
+        config.locale = myLocale;
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+    }
+
+    static String arTranslate(Context context, String text) {
+        if (Utils.getLocale(context).equalsIgnoreCase("ar")) {
+            text = text.trim();
+            text = text.replaceAll("\\s", "")
+                    .replaceAll("0", "٠")
+                    .replaceAll("1", "١")
+                    .replaceAll("2", "٢")
+                    .replaceAll("3", "٣")
+                    .replaceAll("4", "٤")
+                    .replaceAll("5", "٥")
+                    .replaceAll("6", "٦")
+                    .replaceAll("7", "٧")
+                    .replaceAll("8", "٨")
+                    .replaceAll("9", "٩");
+        }
+        return text;
     }
 }
 

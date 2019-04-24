@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -20,7 +21,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ContactsFragment extends Fragment implements Refresher {
+public class ContactsFragment extends Fragment {
     // Contacts Fragment class
     private View view = null;
     RecyclerView contactsRv;
@@ -45,6 +46,8 @@ public class ContactsFragment extends Fragment implements Refresher {
             contactsAdapter = new ContactsAdapter(activity, contacts);
             contactsRv.setAdapter(contactsAdapter);
             contactsRv.setLayoutManager(new LinearLayoutManager(activity));
+            DividerItemDecoration d = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
+            contactsRv.addItemDecoration(new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL));
             dragAndDrop();
             swipeToDelete();
         }
@@ -98,7 +101,6 @@ public class ContactsFragment extends Fragment implements Refresher {
                                             contactsAdapter.restoreContact(contact, contactPosition);
                                         }
                                     });
-                                    snackbar.setActionTextColor(Color.YELLOW);
                                     snackbar.show();
                                 }
                             }
@@ -134,13 +136,12 @@ public class ContactsFragment extends Fragment implements Refresher {
         itemTouchHelper.attachToRecyclerView(contactsRv);
     }
 
-    @Override
-    public void refresh(String name, String number) {
-        contacts = new DatabaseHelper(activity).loadContacts();
-        contactsAdapter = new ContactsAdapter(activity, contacts);
-        contactsAdapter.deleteContact(name, number);
-        contactsAdapter.notifyDataSetChanged();
-        contactsRv.setAdapter(contactsAdapter);
-
-    }
+//    @Override
+//    public void refresh(String name, String number) {
+//        contacts = new DatabaseHelper(activity).loadContacts();
+//        contactsAdapter = new ContactsAdapter(activity, contacts);
+//        contactsAdapter.deleteContact(name, number);
+//        contactsAdapter.notifyDataSetChanged();
+//        contactsRv.setAdapter(contactsAdapter);
+//    }
 }

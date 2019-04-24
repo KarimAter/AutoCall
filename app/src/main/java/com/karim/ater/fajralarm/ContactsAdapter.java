@@ -45,8 +45,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     @Override
     public void onBindViewHolder(@NonNull ContactViewHolder holder, final int position) {
         holder.contact_Name.setText(contacts.get(position).getContactName());
-        holder.contact_Number.setText(contacts.get(position).getContactNumber());
-        holder.contact_Call_Time.setText(contacts.get(position).getContactCallTime());
+        holder.contact_Number.setText(Utils.arTranslate(context, contacts.get(position).getContactNumber()));
+        holder.contact_Call_Time.setText(Utils.arTranslate(context, contacts.get(position).getContactCallTime()));
     }
 
 

@@ -1,5 +1,6 @@
 package com.karim.ater.fajralarm;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -57,11 +58,10 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         int backgroundCornerOffset = 0;
         final View foregroundView = ((ContactsAdapter.ContactViewHolder) viewHolder).mView;
-        ColorDrawable background = new ColorDrawable(Color.RED);
-        Drawable icon = ContextCompat.getDrawable(((ContactsAdapter) recyclerView.getAdapter()).getContext()
-                , android.R.drawable.ic_menu_delete);
+        Context context = ((ContactsAdapter) recyclerView.getAdapter()).getContext();
+        ColorDrawable background = new ColorDrawable(context.getResources().getColor(R.color.colorSecondary));
 
-
+        Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_delete_black_24dp);
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             if (dX < 0) {
                 int iconMargin = (foregroundView.getHeight() - icon.getIntrinsicHeight()) / 2;

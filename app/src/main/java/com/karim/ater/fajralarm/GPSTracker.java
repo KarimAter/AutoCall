@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 public class GPSTracker implements LocationListener {
 
@@ -99,7 +100,7 @@ public class GPSTracker implements LocationListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        Log.d("Locations", "getLocation: " + latitude + longitude);
         return location;
     }
 

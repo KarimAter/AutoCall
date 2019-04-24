@@ -15,6 +15,7 @@
 
         <Button
             android:id="@+id/cancelAlarmBu"
+            style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -26,9 +27,9 @@
 
         <Button
             android:id="@+id/setAlarmBu"
+            style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="@string/setAlarmButtonText"
@@ -44,10 +45,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:timePickerMode="spinner"
-            ads:layout_constraintTop_toTopOf="@+id/guideline9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fajrTimeTv" />
+            app:layout_constraintTop_toBottomOf="@+id/fajrTimeTv"
+            app:layout_constraintTop_toTopOf="@+id/guideline9" />
 
 
         <com.google.android.gms.ads.AdView
@@ -60,6 +61,7 @@
             ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
             ads:layout_constraintBottom_toBottomOf="parent"
             ads:layout_constraintTop_toBottomOf="@+id/setAlarmBu"
+            ads:layout_constraintVertical_bias="1.0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

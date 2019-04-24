@@ -3,7 +3,8 @@ package com.karim.ater.fajralarm;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -37,7 +39,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.time.LocalTime;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -102,7 +104,7 @@ public class HomeFragment extends Fragment {
                         // Todo: unhash
 //                        if (timeDifference) {
                         getTime();
-                        String firstAlarmTime = Utils.convertCalendarToString(calendar, dateFormat);
+                        String firstAlarmTime = Utils.convertCalendarToString(calendar, timeFormat);
                         callCalendar = calendar;
                         // resetting call counts to default value and clearing old logs
                         DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -125,7 +127,8 @@ public class HomeFragment extends Fragment {
                         // showing snack bar with Undo option
                         Snackbar snackbar = Snackbar
                                 .make(activity.findViewById(R.id.mCoordinatorLo),
-                                        getString(R.string.SetAlarmAction) + firstAlarmTime, Snackbar.LENGTH_LONG);
+                                        getString(R.string.SetAlarmAction) + " " + Utils.arTranslate(context, firstAlarmTime),
+                                        Snackbar.LENGTH_LONG);
                         snackbar.setAction(getString(R.string.UndoAction), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -133,13 +136,7 @@ public class HomeFragment extends Fragment {
                                 CancellingAlarms();
                             }
                         });
-                        snackbar.setActionTextColor(Color.YELLOW);
                         snackbar.show();
-//                        Toast.makeText(context, context.getResources().getString(R.string.SetAlarmAction)
-//                                + dateFormat.format(calendar.getTime()), Toast.LENGTH_LONG).show();
-//                        }
-//                        else Toast.makeText(context, R.string.AlarmTimingMessage,
-//                                Toast.LENGTH_LONG).show();
                     } else {
                         // Request permissions
                         Permissions.checkPermissions(getActivity(), Constants.MAIN_PERMISSIONS);
@@ -198,7 +195,7 @@ public class HomeFragment extends Fragment {
                         String fajrPrayerTime = currentResponse.getData().getTimings().getFajr();
 //                        Toast.makeText(context, fajrPrayerTime, Toast.LENGTH_LONG).show();
                         Utils.setFajrPrayerTime(context, fajrPrayerTime);
-                        fajrTimeTv.setText(fajrPrayerTime);
+                        fajrTimeTv.setText(Utils.arTranslate(context, fajrPrayerTime));
                         fajrTimeTv.setVisibility(View.VISIBLE);
                         Log.d("TimingCalibration", "onResponse: " + response.toString());
                     }
@@ -243,7 +240,7 @@ public class HomeFragment extends Fragment {
     private void setFajrTimeTv() {
         String fajrPrayerTime = Utils.getFajrPrayerTime(context);
         if (!fajrPrayerTime.isEmpty())
-            fajrTimeTv.setText(fajrPrayerTime);
+            fajrTimeTv.setText(Utils.arTranslate(context, fajrPrayerTime));
     }
 
     private void initializeViews(View view) {
@@ -264,6 +261,8 @@ public class HomeFragment extends Fragment {
         fajrTimeTv = view.findViewById(R.id.fajrTimeTv);
         setAlarmBu = view.findViewById(R.id.setAlarmBu);
         cancelAlarmBu = view.findViewById(R.id.cancelAlarmBu);
+        applyStyLing(timePicker);
+
     }
 
     // Todo: Change add Id
@@ -338,5 +337,43 @@ public class HomeFragment extends Fragment {
             }
         });
         return lastLocation;
+    }
+
+    private void applyStyLing(TimePicker timePicker) {
+        Resources system = Resources.getSystem();
+        int hourNumberPickerId = system.getIdentifier("hour", "id", "android");
+        int minuteNumberPickerId = system.getIdentifier("minute", "id", "android");
+        int ampmNumberPickerId = system.getIdentifier("amPm", "id", "android");
+
+        NumberPicker hourNumberPicker = timePicker.findViewById(hourNumberPickerId);
+        NumberPicker minuteNumberPicker = timePicker.findViewById(minuteNumberPickerId);
+        NumberPicker ampmNumberPicker = timePicker.findViewById(ampmNumberPickerId);
+
+        setNumberPickerDividerColour(hourNumberPicker);
+        setNumberPickerDividerColour(minuteNumberPicker);
+        setNumberPickerDividerColour(ampmNumberPicker);
+    }
+
+    private void setNumberPickerDividerColour(NumberPicker number_picker) {
+        final int count = number_picker.getChildCount();
+
+        for (int i = 0; i < count; i++) {
+
+            try {
+                Field dividerField = number_picker.getClass().getDeclaredField("mSelectionDivider");
+                dividerField.setAccessible(true);
+                ColorDrawable colorDrawable = new ColorDrawable(context.getResources().getColor(R.color
+                        .colorSecondary));
+                dividerField.set(number_picker, colorDrawable);
+
+                number_picker.invalidate();
+            } catch (NoSuchFieldException e) {
+                Log.w("setNumberPickerTxtClr", e);
+            } catch (IllegalAccessException e) {
+                Log.w("setNumberPickerTxtClr", e);
+            } catch (IllegalArgumentException e) {
+                Log.w("setNumberPickerTxtClr", e);
+            }
+        }
     }
 }

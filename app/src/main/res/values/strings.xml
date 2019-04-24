@@ -34,6 +34,12 @@
     <string name="start_time">Start Time</string>
     <string name="end_time">End Time</string>
     <string name="ringing_duration">Ringing Duration</string>
+    <string name="status">Status</string>
+    <string name="contactname">ContactName</string>
+    <string name="schedulingMessage"> Next call will be at </string>
+    <string name="cancelMessage"> Call is cancelled by  </string>
+    <string name="noAnswerMessage"> No answer from  </string>
+    <string name="protectedApps">protected Apps</string>
 
 
 </resources>

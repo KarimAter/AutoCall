@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
-
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
@@ -28,14 +27,12 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            app:backgroundTint="@android:color/holo_blue_light"
-            app:elevation="2dp"
-            app:fabSize="normal"
+            android:layout_marginBottom="4dp"
             app:layout_anchor="@+id/frame"
-            app:layout_anchorGravity="right|bottom"
+            app:layout_anchorGravity="bottom|end"
             app:srcCompat="@drawable/ic_person_add_black_24dp"
             tools:ignore="KeyboardInaccessibleWidget" />
 
@@ -55,7 +52,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             app:labelVisibilityMode="labeled"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
             app:menu="@menu/bottom_navigation_menu" />
+
+        <!--android:background="@color/colorPrimary"-->
+        <!--app:itemIconTint="@color/white"-->
+        <!--app:itemTextColor="@color/white"-->
     </android.support.design.widget.CoordinatorLayout>
 
 

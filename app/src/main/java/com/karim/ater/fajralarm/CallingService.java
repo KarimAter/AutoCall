@@ -8,9 +8,11 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import static com.karim.ater.fajralarm.Constants.dateFormat;
 import static com.karim.ater.fajralarm.Constants.timeFormat;
@@ -36,7 +38,9 @@ public class CallingService extends Service {
         tm = (TelephonyManager) getApplicationContext().getSystemService(TELEPHONY_SERVICE);
         phoneListener = new PhoneListener();
         context = getBaseContext();
+        Utils.updateLocale(context);
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -46,27 +50,15 @@ public class CallingService extends Service {
         return START_NOT_STICKY;
     }
 
-//    @Override
-//    public void stopCallingService(CallingService callingService) {
-////        CallingService.this.stopSelf();
-////        tm.listen(phoneListener, PhoneStateListener.LISTEN_NONE);
-////        phoneListener = null;
-////        tm = null;
-////        Log.d(TAG, "Interface intervented.. ");
-////Todo: try handler to end calls
-//    }
 
     class PhoneListener extends PhoneStateListener {
-
-        //        Refresher stoppingServiceInterface = CallingService.this;
         private String offhookMsg, idleMsg, durationMsg, actionMsg, resultMsg;
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             super.onCallStateChanged(state, incomingNumber);
-            contactCallLogDetails.setContactName(currentCallingNumber);
-
             DatabaseHelper dHelperr = new DatabaseHelper(context);
+            String contactName = dHelperr.getContactName(currentCallingNumber);
             ArrayList<CallTimes> previousCallTimes = dHelperr.getContactCallTimesLog(currentCallingNumber).getCallTimes();
 
             switch (state) {
@@ -78,10 +70,12 @@ public class CallingService extends Service {
                         idleMsg = "Contact Number " + currentCallingNumber + " idleCal Fajr at " +
                                 dateFormat.format(Calendar.getInstance().getTime());
                         Log.d(TAG, idleMsg);
-                        callTimes.setEndTime(timeFormat.format(Calendar.getInstance().getTime()));
+                        String endTime = timeFormat.format(Calendar.getInstance().getTime());
+
+                        callTimes.setEndTime(Utils.arTranslate(context, endTime));
                         int count = databaseHelper.getCallCount(currentCallingNumber);
                         long callDuration = (idleCal - offhookCal);
-                        callTimes.setRingingDuration(String.valueOf(callDuration / 1000));
+                        callTimes.setRingingDuration(Utils.arTranslate(context, String.valueOf(callDuration / 1000)));
 
                         // if no or late answer from the receptor
 
@@ -103,8 +97,8 @@ public class CallingService extends Service {
                                 e.printStackTrace();
                             }
                             Utils.setLastCallTime(context, dateFormat.format(newCalendar.getTime()));
-                            resultMsg = resultMsg +
-                                    "\n next Call is " + currentCallingNumber + " scheduled at " + timeFormat.format(newCalendar.getTime());
+                            resultMsg = getString(R.string.schedulingMessage) + " " +
+                                    Utils.arTranslate(context, timeFormat.format(newCalendar.getTime()));
                             Log.d(TAG, resultMsg);
                             // scheduling the next call and updating time & count in database
                             Utils.setRecurringAlarm(context, currentCallingNumber, id, newCalendar);
@@ -113,12 +107,11 @@ public class CallingService extends Service {
                         } else {
                             if ((callDuration > 37000) & count == 0) {
                                 // Call attempts are finished
-                                resultMsg = "No answer from receptor: " + currentCallingNumber;
+                                resultMsg = getString(R.string.noAnswerMessage) + " " + contactName;
                                 Log.d(TAG, resultMsg);
                             } else {
-                                //Todo: Call cancelled by 'contactName' @ calendar
                                 // User has cancelled
-                                resultMsg = "Call is cancelled by receptor: " + currentCallingNumber;
+                                resultMsg = getApplicationContext().getString(R.string.cancelMessage) + " " + contactName;
                                 Log.d(TAG, resultMsg);
                             }
                         }
@@ -130,7 +123,6 @@ public class CallingService extends Service {
                                 contactCallLogDetails.toString());
                         Log.d(TAG, "Ending the service.. ");
                         stopSelf();
-//                        stoppingServiceInterface.stopCallingService(CallingService.this);
                     }
                     break;
                 case TelephonyManager.CALL_STATE_OFFHOOK:
@@ -139,7 +131,8 @@ public class CallingService extends Service {
                     offhookMsg = "Contact Number " + currentCallingNumber + " offhookCal Fajr at "
                             + dateFormat.format(Calendar.getInstance().getTime());
                     Log.d(TAG, offhookMsg);
-                    callTimes.setStartTime(timeFormat.format(Calendar.getInstance().getTime()));
+                    String startTime = timeFormat.format(Calendar.getInstance().getTime());
+                    callTimes.setStartTime(Utils.arTranslate(context, startTime));
                     break;
             }
         }

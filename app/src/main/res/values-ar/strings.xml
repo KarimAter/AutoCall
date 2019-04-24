@@ -30,8 +30,14 @@
     <string name="contactNumberTvText">الرقم</string>
     <string name="callTimeTvText">وقت الإتصال</string>
     <string name="NoLogs">لا يوجد سجل للمكالمات الآن.</string>
-    <string name="start_time">بدابة المكالمة</string>
+    <string name="start_time">بداية المكالمة</string>
     <string name="end_time">نهاية المكالمة</string>
     <string name="ringing_duration">مدة المكالمة</string>
+    <string name="status">النتيجة</string>
+    <string name="contactname">الاسم</string>
+    <string name="schedulingMessage">الإتصال التالي سيكون في </string>
+    <string name="cancelMessage"> الإتصال ألغي من </string>
+    <string name="noAnswerMessage">لا رد من </string>
+    <string name="protectedApps">التطبيقات المحمية</string>
 
 </resources>
