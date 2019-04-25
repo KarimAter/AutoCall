@@ -11,7 +11,7 @@
     <string name="CallCountPref">اختر عدد مكالمات الإيقاظ</string>
     <string name="FajrMethodPref">اختر طريقة حساب توقيت الفجر</string>
     <string name="StopBatterOptPref">اجعل متصل الفجر تعمل في الخلفية لتعمل بشكل صحيح</string>
-    <string name="StopBatterOptPrefDialogMsg">لا بد أن تكون متاحة في التطبيقات المحمية حتي تعمل بشكل صحيح</string>
+    <string name="StopBatterOptPrefDialogMsg">لا بد أن تكون متاحة في التطبيقات المحمية و تطبيقات تحسين أداء البطارية حتي تعمل بشكل صحيح</string>
     <string name="HomeButton">الرئيسية</string>
     <string name="ContactsButton">الأرقام</string>
     <string name="LogsButton">المكالمات</string>
@@ -39,5 +39,7 @@
     <string name="cancelMessage"> الإتصال ألغي من </string>
     <string name="noAnswerMessage">لا رد من </string>
     <string name="protectedApps">التطبيقات المحمية</string>
+    <string name="gpsDialogTitle">إعدادات الموقع</string>
+    <string name="gpsDialogMessage"> من فضلك افتح الموقع و اتصل بالشبكة للحصول علي توقيت الفجر</string>
 
 </resources>

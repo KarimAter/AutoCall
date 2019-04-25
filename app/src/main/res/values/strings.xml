@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FajrCaller</string>
+    <string name="app_name">Fajr Caller</string>
     <string name="setAlarmButtonText">Set Alarms</string>
     <string name="stopAlarmButtonText">Stop Alarms</string>
     <string name="Settings">Settings</string>
@@ -11,7 +11,8 @@
     <string name="CallCountPref">Select the number of waking calls</string>
     <string name="FajrMethodPref">Select fajr prayer time calculation method</string>
     <string name="StopBatterOptPref">Allow Fajr alarm to work in background to function properly</string>
-    <string name="StopBatterOptPrefDialogMsg">requires to be enabled in Protected Apps to function properly</string>
+    <string name="StopBatterOptPrefDialogMsg"> requires to be enabled in protected Apps and battery optimization applications
+        to function properly </string>
     <string name="HomeButton">Home</string>
     <string name="ContactsButton">Contacts</string>
     <string name="LogsButton">Logs</string>
@@ -40,6 +41,8 @@
     <string name="cancelMessage"> Call is cancelled by  </string>
     <string name="noAnswerMessage"> No answer from  </string>
     <string name="protectedApps">protected Apps</string>
+    <string name="gpsDialogTitle">GPS settings</string>
+    <string name="gpsDialogMessage">Please turn on GPS and internet to get fajr prayer time</string>
 
 
 </resources>
