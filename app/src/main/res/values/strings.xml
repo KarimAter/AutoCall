@@ -43,6 +43,50 @@
     <string name="protectedApps">protected Apps</string>
     <string name="gpsDialogTitle">GPS settings</string>
     <string name="gpsDialogMessage">Please turn on GPS and internet to get fajr prayer time</string>
+    <string name="nocontactsmessage">Please add contacts first.</string>
+    <string name="cancelAlarmMmessage">Scheduled calls have been cancelled  </string>
+    <string name="NotificationContent">Scheduled call of&#160;</string>
+
+
+    <string name="ShiaIthnaAnsar">Shia Ithna-Ansar.</string>
+    <string name="Karachi">University of Islamic Sciences, Karachi</string>
+    <string name="America">Islamic Society of North America</string>
+    <string name="League">Muslim World League</string>
+    <string name="Makkah">Umm Al-Qura University, Makkah</string>
+    <string name="Egypt">Egyptian General Authority of Survey</string>
+    <string name="Tehran">Institute of Geophysics, University of Tehran</string>
+    <string name="Gulf">Gulf Region</string>
+    <string name="Kuwait">Kuwait</string>
+    <string name="Qatar">Qatar</string>
+    <string name="Singapore">Majlis Ugama Islam Singapura, Singapore</string>
+    <string name="France">Union Organization islamic de France</string>
+    <string name="Turkey">Directorate of Religious Affairs, Turkey</string>
+    <string name="Russia">Spiritual Administration of Muslims of Russia</string>
+
+    <string name="One">One</string>
+    <string name="Two">Two</string>
+    <string name="Three">Three</string>
+    <string name="Four">Four</string>
+
+
+    <string name="English">English</string>
+    <string name="Arabic">العربية</string>
+
+    <string name="HelpText">
+        Fajr Caller performs automatic calls for contacts added to contacts tab from your phonebook.\n
+        Add contacts then select the time at which you need to start the scheduled calls and then press Set Alarms button.\n
+        \n
+        Calls are scheduled according to order of contacts addition in contact tab.\n
+        First contact scheduled call will be at the chosen alarm time, and each selected contact will have its scheduled call a minute after.\n
+        If call duration is more than 40 seconds another scheduled call will be performed until number of maximum call tries are reached.\n
+        Number of call tries can be changed from Settings.\n
+        \n
+        Setting scheduled calls should be with 30 minutes of fajr prayer time.\n
+        You can cancel scheduled calls by pressing Stop Alarms button.\n
+        You can add up to 10 contacts maximum.\n
+        You can delete contact by swiping to left.\n
+        Order of contact can be readjusted by dragging the desired contact up or down in contact list.\n
+    </string>
 
 
 </resources>

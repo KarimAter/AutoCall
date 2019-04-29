@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.paradisegate.fajrcaller">
+    package="com.paradisegate.fajralarm">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -9,21 +9,26 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!--Todo:allowbackup-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
-        android:name="com.paradisegate.fajrcaller.AppController"
-        android:allowBackup="false"
+        android:name=".AppController"
+        android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".HelpActivity"></activity>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-6836093923955433~8387322372" />
+            android:value="ca-app-pub-3437596687080964~2293892909" />
+
         <activity
-            android:name="com.paradisegate.fajrcaller.Fagr"
-            android:configChanges="orientation"
+            android:name=".Fagr"
+            android:configChanges="orientation|locale"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -36,7 +41,7 @@
         </activity>
 
         <receiver
-            android:name="com.paradisegate.fajrcaller.AlarmReceiver"
+            android:name=".AlarmReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -45,17 +50,15 @@
         </receiver>
 
         <service
-            android:name="com.paradisegate.fajrcaller.CallingService"
+            android:name=".CallingService"
             android:enabled="true"
             android:exported="true" />
 
         <activity
-            android:name="com.paradisegate.fajrcaller.SettingsActivity"
+            android:name=".SettingsActivity"
             android:configChanges="orientation"
             android:label="@string/Settings"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

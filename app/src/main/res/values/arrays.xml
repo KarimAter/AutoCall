@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="LanguageArray">
-        <item>English</item>
-        <item>Arabic</item>
+        <item>@string/English</item>
+        <item>@string/Arabic</item>
     </string-array>
     <string-array name="LanguageArrayValues">
         <item>en</item>
@@ -10,10 +10,10 @@
     </string-array>
 
     <string-array name="NumberOfCallsArray">
-        <item>One</item>
-        <item>Two</item>
-        <item>Three</item>
-        <item>Four</item>
+        <item>@string/One</item>
+        <item>@string/Two</item>
+        <item>@string/Three</item>
+        <item>@string/Four</item>
     </string-array>
     <string-array name="NumberOfCallsArrayValues">
         <item>1</item>
@@ -21,22 +21,22 @@
         <item>3</item>
         <item>4</item>
     </string-array>
-
+    // Todo:translate
     <string-array name="FajrMethodsArray">
-        <item>Shia Ithna-Ansar</item>
-        <item>University of Islamic Sciences, Karachi</item>
-        <item>Islamic Society of North America</item>
-        <item>Muslim World League</item>
-        <item>Umm Al-Qura University, Makkah</item>
-        <item>Egyptian General Authority of Survey</item>
-        <item>Institute of Geophysics, University of Tehran</item>
-        <item>Gulf Region</item>
-        <item>Kuwait</item>
-        <item>Qatar</item>
-        <item>Majlis Ugama Islam Singapura, Singapore</item>
-        <item>Union Organization islamic de France</item>
-        <item>Diyanet İşleri Başkanlığı, Turkey</item>
-        <item>Spiritual Administration of Muslims of Russia</item>
+        <item>@string/ShiaIthnaAnsar</item>
+        <item>@string/Karachi</item>
+        <item>@string/America</item>
+        <item>@string/League</item>
+        <item>@string/Makkah</item>
+        <item>@string/Egypt</item>
+        <item>@string/Tehran</item>
+        <item>@string/Gulf</item>
+        <item>@string/Kuwait</item>
+        <item>@string/Qatar</item>
+        <item>@string/Singapore</item>
+        <item>@string/France</item>
+        <item>@string/Turkey</item>
+        <item>@string/Russia</item>
     </string-array>
     <string-array name="FajrMethodsArrayValues">
         <item>0</item>

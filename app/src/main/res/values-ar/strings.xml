@@ -41,5 +41,45 @@
     <string name="protectedApps">التطبيقات المحمية</string>
     <string name="gpsDialogTitle">إعدادات الموقع</string>
     <string name="gpsDialogMessage"> من فضلك افتح الموقع و اتصل بالشبكة للحصول علي توقيت الفجر</string>
+    <string name="nocontactsmessage">من فضلك أضف أرقام أولا</string>
+    <string name="cancelAlarmMmessage">تم إلغاء إجراء المكالمات</string>
+    <string name="NotificationContent">مكالمة الفجر ل</string>
+
+    <string name="ShiaIthnaAnsar">شيعة اثني عشر</string>
+    <string name="Karachi">جامعة العلوم الإسلامية ، كراتشي</string>
+    <string name="America">الجمعية الإسلامية لأمريكا الشمالية</string>
+    <string name="League">رابطة العالم الإسلامي</string>
+    <string name="Makkah">جامعة أم القرى ، مكة المكرمة</string>
+    <string name="Egypt">الهيئة المصرية العامة للمساحة</string>
+    <string name="Tehran">معهد الجيوفيزياء ، جامعة طهران</string>
+    <string name="Gulf">منطقة الخليج</string>
+    <string name="Kuwait">الكويت</string>
+    <string name="Qatar"> قطر</string>
+    <string name="Singapore">مجلس اوغاما اسلام سنغافورا ، سنغافورة</string>
+    <string name="France">منظمة الاتحاد الإسلامي في فرنسا</string>
+    <string name="Turkey">مديرية الشؤون الدينية ، تركيا</string>
+    <string name="Russia">الإدارة الروحية لمسلمي روسيا</string>
+
+    <string name="One">واحد</string>
+    <string name="Two">إثنان</string>
+    <string name="Three">ثلاثة</string>
+    <string name="Four">أربعة</string>
+
+    <string name="English">English</string>
+    <string name="Arabic">العربية</string>
+
+    <string name="HelpText">
+يقوم فجر المتصل بإجراء مكالمات تلقائية لجهات الاتصال التي تمت إضافتها من دليل الهاتف الخاص بك.\n
+أضف جهات اتصال ، ثم حدد الوقت الذي تريد أن تبدأ فيه المكالمات المجدولة ثم اضغط على زر التشغيل.\n
+يتم جدولة المكالمات وفقًا لترتيب إضافة جهات الاتصال.\n
+ستكون أول مكالمة مجدولة في وقت التنبيه المختار ، وسيكون لكل جهة اتصال محددة مكالمة مجدولة بعد دقيقة واحدة.\n
+  إذا كانت مدة المكالمة أكثر من ٤٠ ثانية، فسيتم إجراء مكالمة مجدولة أخرى حتى يتم الوصول إلى الحد الأقصى لعدد محاولات الاتصال.
+يمكن تغيير عدد محاولات الاتصال من الإعدادات.\n
+يمكنك إلغاء المكالمات المجدولة عن طريق الضغط على زر الإلغاء.\n
+يمكنك إضافة إلى 10 جهات اتصال كحد أقصى.\n
+يمكنك حذف جهة اتصال عن طريق الإزاحة إلى اليسار.\n
+يمكن تعديل ترتيب الاتصال عن طريق تحريك جهة الاتصال المطلوبة لأعلى أو لأسفل في قائمة جهات الاتصال.\n
+    </string>
+
 
 </resources>
