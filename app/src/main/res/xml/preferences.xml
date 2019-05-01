@@ -10,14 +10,6 @@
         android:summary="@string/LanguagePref"
         android:title="@string/Language" />
     <ListPreference
-        android:defaultValue="4"
-        android:entries="@array/NumberOfCallsArray"
-        android:entryValues="@array/NumberOfCallsArrayValues"
-        android:icon="@drawable/ic_looks_4_black_24dp"
-        android:key="call_count_preference"
-        android:summary="@string/CallCountPref"
-        android:title="@string/CallCount" />
-    <ListPreference
         android:defaultValue="5"
         android:entries="@array/FajrMethodsArray"
         android:entryValues="@array/FajrMethodsArrayValues"
@@ -25,6 +17,19 @@
         android:key="fajr_method_preference"
         android:summary="@string/FajrMethodPref"
         android:title="@string/FajrMethod" />
+    <ListPreference
+        android:defaultValue="4"
+        android:entries="@array/NumberOfCallsArray"
+        android:entryValues="@array/NumberOfCallsArrayValues"
+        android:icon="@drawable/ic_looks_4_black_24dp"
+        android:key="call_count_preference"
+        android:summary="@string/CallCountPref"
+        android:title="@string/CallCount" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:icon="@drawable/ic_access_alarm_black_24dp"
+        android:key="personalAlarmSw"
+        android:title="@string/PersonalAlarm" />
     <Preference
         android:icon="@drawable/ic_battery_full_black_24dp"
         android:key="stopBatteryOptimization"

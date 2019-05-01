@@ -87,6 +87,9 @@
         You can delete contact by swiping to left.\n
         Order of contact can be readjusted by dragging the desired contact up or down in contact list.\n
     </string>
+    <string name="Help">Help</string>
+    <string name="stopPersonalAlarm">Stop</string>
+    <string name="PersonalAlarm">Alarm</string>
 
 
 </resources>
