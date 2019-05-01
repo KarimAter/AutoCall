@@ -71,6 +71,8 @@
     <string name="Help">المساعدة</string>
     <string name="stopPersonalAlarm">إيقاف</string>
     <string name="PersonalAlarm">المنبه</string>
+    <string name="PersonalAlarmText">منبه شخصي يضبط تلقائيا قبل المكالمة الأولي بدقيقة لإيقاظك للصلاة</string>
+
 
     <string name="HelpText">
 يقوم فجر المتصل بإجراء مكالمات تلقائية لجهات الاتصال التي تمت إضافتها من دليل الهاتف الخاص بك.\n

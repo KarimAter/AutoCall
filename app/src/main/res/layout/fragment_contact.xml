@@ -1,66 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/contactCV"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="4dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="4dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp">
 
-    <TextView
-        android:id="@+id/contact_Name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Name"
-        android:textAlignment="viewStart"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/contact_Number"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/contact_Number"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Number"
-        android:textAlignment="center"
-        android:textDirection="ltr"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/contact_Call_Time"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/contact_Name"
-        app:layout_constraintTop_toTopOf="@+id/contact_Name" />
+        <TextView
+            android:id="@+id/contact_Name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Name"
+            android:textAlignment="viewStart"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/contact_Number"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/guideline7"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/contact_Call_Time"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Time"
-        android:textAlignment="viewEnd"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline8"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/contact_Number"
-        app:layout_constraintTop_toTopOf="@+id/contact_Name" />
+        <TextView
+            android:id="@+id/contact_Number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Number"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textDirection="ltr"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/contact_Call_Time"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/contact_Name"
+            app:layout_constraintTop_toTopOf="@+id/contact_Name" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.04" />
+        <TextView
+            android:id="@+id/contact_Call_Time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textAlignment="viewEnd"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/contact_Number"
+            app:layout_constraintTop_toTopOf="@+id/contact_Name" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.96" />
-</android.support.constraint.ConstraintLayout>
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

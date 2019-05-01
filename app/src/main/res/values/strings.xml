@@ -7,12 +7,12 @@
     <string name="CallCount">Number of calls</string>
     <string name="FajrMethod">Fajr prayer calculation method</string>
     <string name="StopBatterOpt">Stop Battery Optimization</string>
-    <string name="LanguagePref">Change language settings</string>
-    <string name="CallCountPref">Select the number of waking calls</string>
-    <string name="FajrMethodPref">Select fajr prayer time calculation method</string>
-    <string name="StopBatterOptPref">Allow Fajr alarm to work in background to function properly</string>
+    <string name="LanguagePref">Select display language.</string>
+    <string name="CallCountPref">Select the number of waking calls.</string>
+    <string name="FajrMethodPref">Select fajr prayer time calculation method.</string>
+    <string name="StopBatterOptPref">Allow Fajr alarm to work in background to function properly.</string>
     <string name="StopBatterOptPrefDialogMsg"> requires to be enabled in protected Apps and battery optimization applications
-        to function properly </string>
+        to function properly. </string>
     <string name="HomeButton">Home</string>
     <string name="ContactsButton">Contacts</string>
     <string name="LogsButton">Logs</string>
@@ -27,9 +27,9 @@
     for this action. Please open settings, go to permissions and allow them.</string>
     <string name="ForeverDeniedPermsTitle">Permissions Required</string>
     <string name="CancelButton">Cancel</string>
-    <string name="AlarmTimingMessage">Calls should be scheduled before or after Fajr prayer time by 30 minutes</string>
+    <string name="AlarmTimingMessage">Calls should be scheduled before or after Fajr prayer time by 30 minutes.</string>
     <string name="contactNameTvText">Contact Name</string>
-    <string name="contactNumberTvText">Contact Number</string>
+    <string name="contactNumberTvText">Number</string>
     <string name="callTimeTvText">Call Time</string>
     <string name="NoLogs">There are no active logs yet.</string>
     <string name="start_time">Start Time</string>
@@ -42,9 +42,9 @@
     <string name="noAnswerMessage"> No answer from  </string>
     <string name="protectedApps">protected Apps</string>
     <string name="gpsDialogTitle">GPS settings</string>
-    <string name="gpsDialogMessage">Please turn on GPS and internet to get fajr prayer time</string>
+    <string name="gpsDialogMessage">Please turn on GPS and internet to get fajr prayer time.</string>
     <string name="nocontactsmessage">Please add contacts first.</string>
-    <string name="cancelAlarmMmessage">Scheduled calls have been cancelled  </string>
+    <string name="cancelAlarmMmessage">Scheduled calls have been cancelled. </string>
     <string name="NotificationContent">Scheduled call of&#160;</string>
 
 
@@ -90,6 +90,8 @@
     <string name="Help">Help</string>
     <string name="stopPersonalAlarm">Stop</string>
     <string name="PersonalAlarm">Alarm</string>
+    <string name="PersonalAlarmText">Alarm is automatically adjusted one minute prior to the first
+        scheduled call to wake you up for fajr.</string>
 
 
 </resources>
