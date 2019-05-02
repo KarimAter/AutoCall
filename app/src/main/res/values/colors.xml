@@ -5,7 +5,7 @@
     <color name="colorPrimaryLight">#597ea7</color>
     <color name="colorSecondary">#8ac4d0</color>
     <color name="colorSecondaryDark">#5a939f</color>
-    <color name="colorSecondaryLight">#bcf7ff</color>
+    <color name="colorSecondaryLight">#BCF7FF</color>
     <color name="textColorPrimary">#000000</color>
     <color name="textColorSecondary">#ffffff</color>
     <color name="windowBackground">#eceff1</color>

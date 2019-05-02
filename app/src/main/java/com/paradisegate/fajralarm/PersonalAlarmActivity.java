@@ -2,9 +2,11 @@ package com.paradisegate.fajralarm;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -19,9 +21,14 @@ public class PersonalAlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         final Window win = getWindow();
         win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_personal_alarm);
-
+        ConstraintLayout alarm_cLo = findViewById(R.id.alarm_cLo);
+        AnimationDrawable animationDrawable = (AnimationDrawable) alarm_cLo.getBackground();
+        animationDrawable.setEnterFadeDuration(10);
+        animationDrawable.setExitFadeDuration(1000);
+        animationDrawable.start();
         PowerManager powerManager = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
         wakeLock = null;
         if (powerManager != null) {
