@@ -35,7 +35,8 @@ public class PersonalAlarmService extends Service {
             notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         if (notification != null) {
             r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-            r.play();
+            if (r != null)
+                r.play();
         }
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (v != null) {

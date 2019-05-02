@@ -31,14 +31,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             ads:layout_constraintBottom_toTopOf="@+id/adView"
             ads:layout_constraintEnd_toStartOf="@+id/cancelAlarmBu"
             ads:layout_constraintHorizontal_bias="0.5"
             ads:layout_constraintHorizontal_chainStyle="spread"
             ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toBottomOf="@+id/timePicker"
-            ads:layout_constraintVertical_bias="0.0" />
+            ads:layout_constraintTop_toBottomOf="@+id/timePicker" />
 
         <TimePicker
             android:id="@+id/timePicker"

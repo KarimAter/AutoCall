@@ -17,6 +17,11 @@ public class PersonalAlarmActivity extends AppCompatActivity {
     PowerManager.WakeLock wakeLock;
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(Utils.updateLocale(base));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Window win = getWindow();

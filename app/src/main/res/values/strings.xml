@@ -73,25 +73,12 @@
     <string name="Arabic">العربية</string>
 
     <string name="HelpText">
-        Fajr Caller performs automatic calls for contacts added to contacts tab from your phonebook.\n
-        Add contacts then select the time at which you need to start the scheduled calls and then press Set Alarms button.\n
-        \n
-        Calls are scheduled according to order of contacts addition in contact tab.\n
-        First contact scheduled call will be at the chosen alarm time, and each selected contact will have its scheduled call a minute after.\n
-        If call duration is more than 40 seconds another scheduled call will be performed until number of maximum call tries are reached.\n
-        Number of call tries can be changed from Settings.\n
-        \n
-        Setting scheduled calls should be with 30 minutes of fajr prayer time.\n
-        You can cancel scheduled calls by pressing Stop Alarms button.\n
-        You can add up to 10 contacts maximum.\n
-        You can delete contact by swiping to left.\n
-        Order of contact can be readjusted by dragging the desired contact up or down in contact list.\n
+        &#8227; Fajr Caller performs automatic calls for contacts added to contacts tab from your phonebook.\n\n&#8227; Add contacts then select the time at which you need to start the scheduled calls and then press Set Alarms button.\n\n&#8227; Calls are scheduled according to order of contacts addition in contact tab.\n\n&#8227; First contact scheduled call will be at the chosen alarm time, and each selected contact will have its scheduled call a minute after.\n\n&#8227; If call duration is more than 40 seconds another scheduled call will be performed until number of maximum call tries are reached.\n\n&#8227; Personal alarm will ring on your phone to wake you up one minute prior to the first scheduled call.\n\n&#8227; Number of call tries can be changed from settings.\n\n&#8227; You can cancel scheduled calls by pressing Stop Alarms button.\n\n&#8227; You can add up to 10 contacts maximum.\n\n&#8227; You can delete contact by swiping to left.\n\n&#8227; Order of contact can be readjusted by dragging the desired contact up or down in contact list.\n
     </string>
     <string name="Help">Help</string>
     <string name="stopPersonalAlarm">Stop</string>
     <string name="PersonalAlarm">Alarm</string>
-    <string name="PersonalAlarmText">Alarm is automatically adjusted one minute prior to the first
-        scheduled call to wake you up for fajr.</string>
+    <string name="PersonalAlarmText">Alarm is automatically adjusted one minute prior to the first scheduled call to wake you up for fajr.</string>
     <string name="WakeUp">Fajr</string>
 
 

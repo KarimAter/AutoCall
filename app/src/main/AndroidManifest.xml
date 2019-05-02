@@ -57,9 +57,7 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".HelpActivity"
-            android:screenOrientation="portrait" />
+
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -95,8 +93,13 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:configChanges="orientation"
+            android:configChanges="orientation|locale"
             android:label="@string/Settings"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HelpActivity"
+            android:configChanges="orientation|locale"
+            android:label="@string/Help"
             android:screenOrientation="portrait" />
     </application>
 
