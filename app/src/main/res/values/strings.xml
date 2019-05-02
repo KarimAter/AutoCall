@@ -92,6 +92,7 @@
     <string name="PersonalAlarm">Alarm</string>
     <string name="PersonalAlarmText">Alarm is automatically adjusted one minute prior to the first
         scheduled call to wake you up for fajr.</string>
+    <string name="WakeUp">Fajr</string>
 
 
 </resources>

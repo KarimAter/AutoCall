@@ -72,6 +72,7 @@
     <string name="stopPersonalAlarm">إيقاف</string>
     <string name="PersonalAlarm">المنبه</string>
     <string name="PersonalAlarmText">منبه شخصي يضبط تلقائيا قبل المكالمة الأولي بدقيقة لإيقاظك للصلاة</string>
+    <string name="WakeUp">الفجر</string>
 
 
     <string name="HelpText">
